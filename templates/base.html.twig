@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>{% block title %}E-Firma{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {# Fonts #}
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
+
+    {# CSS Files #}
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/open-iconic-bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/animate.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/owl.theme.default.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/aos.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/ionicons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/bootstrap-datepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/jquery.timepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/flaticon.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/icomoon.css') }}">
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/style.css') }}">
+
+    {% block stylesheets %}{% endblock %}
+</head>
+
+<body class="goto-here">
+
+{# Top Bar #}
+<div class="py-1 bg-primary">
+    <div class="container">
+        <div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
+            <div class="col-lg-12 d-block">
+                <div class="row d-flex">
+                    <div class="col-md pr-4 d-flex topper align-items-center">
+                        <div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
+                        <span class="text">+ 1235 2355 98</span>
+                    </div>
+                    <div class="col-md pr-4 d-flex topper align-items-center">
+                        <div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
+                        <span class="text">info@efirma.com</span>
+                    </div>
+                    <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
+                        <span class="text">Livraison en 3-5 jours ouvrables &amp; Retours gratuits</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{# Navbar #}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark ftco-navbar-light" id="ftco-navbar">
+    <div class="container">
+        <a class="navbar-brand" href="<#>">
+            <img src="{{ asset('FrontOffice/images/logo.png') }}" alt="E-Firma Logo" style="height: 120px;">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active"><a href="{{ path('app_home') }}" class="nav-link">Accueil</a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Produits</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown04">
+                    <a class="dropdown-item" href="{{ path('app_produit_index') }}">Shop</a>
+                    <a class="dropdown-item" href="{{ path('app_produit_categorie_index') }}">Categories</a>
+                    <a class="dropdown-item" href="{{ path('app_produit_new') }}">Ajouter Produits</a>
+                </div>
+            </li>
+
+             <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Commandes</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown04">
+                    <a class="dropdown-item" href="{{ path('app_commande_index') }}">Liste Des Commandes</a>
+                </div>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Service</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown04">
+                    <a class="dropdown-item" href="{{ path('app_rendez_vous_index', {'type': 'TYPE_VETERINAIRE'}) }}">Service Véterinaire</a>
+                    <a class="dropdown-item" href="{{ path('app_rendez_vous_index', {'type': 'TYPE_EXPERT'}) }}">Service Experts</a>
+                    <a class="dropdown-item" href="{{ path('app_service_index') }}">Nos Services</a>
+                    <a class="dropdown-item" href="{{ path('app_rendez_vous_index') }}">Vos Rendez Vous</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Parcelle</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown04">
+                    <a class="dropdown-item" href="{{ path('app_parcelle_index') }}">Parcelles</a>
+                    <a class="dropdown-item" href="{{ path('app_culture_parcelle_index') }}">Cultures</a>
+                    <a class="dropdown-item" href="{{ path('app_parcelle_new') }}">Ajouter parcelle</a>
+                </div>
+            </li>
+                {% if app.user %}
+                    <li class="nav-item">
+                        <span class="nav-link">Bienvenue, {{ app.user.nom }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_logout') }}">Se Déconnecter</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item"><a href="{{ path('app_login') }}" class="nav-link">Se Connecter</a></li>
+                    <li class="nav-item"><a href="{{ path('app_register') }}" class="nav-link">Creer un compte</a></li>
+                    
+                {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<main>
+    {% block body %}{% endblock %}
+</main>
+
+<section class="ftco-section ftco-counter img" id="section-counter" style="background-image: url({{ asset('FrontOffice/images/bg_3.jpg') }});">
+    <div class="container">
+        <div class="row justify-content-center py-5">
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
+                        <div class="block-18 text-center">
+                            <div class="text">
+                                <strong class="number" data-number="10000">0</strong>
+                                <span>Happy Customers</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
+                        <div class="block-18 text-center">
+                            <div class="text">
+                                <strong class="number" data-number="100">0</strong>
+                                <span>Branches</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
+                        <div class="block-18 text-center">
+                            <div class="text">
+                                <strong class="number" data-number="1000">0</strong>
+                                <span>Partners</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
+                        <div class="block-18 text-center">
+                            <div class="text">
+                                <strong class="number" data-number="100">0</strong>
+                                <span>Awards</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section bg-light">
+    <div class="container">
+        <div class="row no-gutters ftco-services">
+            <div class="col-lg-3 text-center d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services mb-md-0 mb-4">
+                    <div class="icon bg-color-1 active d-flex justify-content-center align-items-center mb-2">
+                        <span class="flaticon-shipped"></span>
+                    </div>
+                    <div class="media-body">
+                        <h3 class="heading">Livraison Gratuite</h3>
+                        <span>Sur les commandes de plus de 100$</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 text-center d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services mb-md-0 mb-4">
+                    <div class="icon bg-color-2 d-flex justify-content-center align-items-center mb-2">
+                        <span class="flaticon-diet"></span>
+                    </div>
+                    <div class="media-body">
+                        <h3 class="heading">Toujours Frais</h3>
+                        <span>Produits bien emballés</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 text-center d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services mb-md-0 mb-4">
+                    <div class="icon bg-color-3 d-flex justify-content-center align-items-center mb-2">
+                        <span class="flaticon-award"></span>
+                    </div>
+                    <div class="media-body">
+                        <h3 class="heading">Qualité Supérieure</h3>
+                        <span>Produits de qualité</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 text-center d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services mb-md-0 mb-4">
+                    <div class="icon bg-color-4 d-flex justify-content-center align-items-center mb-2">
+                        <span class="flaticon-customer-service"></span>
+                    </div>
+                    <div class="media-body">
+                        <h3 class="heading">Assistance</h3>
+                        <span>Assistance 24/7 </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Footer #}
+<footer class="ftco-footer ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="mouse">
+                <a href="#" class="mouse-icon">
+                    <div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
+                </a>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-md">
+                <div class="ftco-footer-widget mb-4">
+                    <h2 class="ftco-heading-2">E-Firma</h2>
+                    <p>Empowering sustainable agriculture with intelligent solutions. We're dedicated to providing tools and services that contribute to the development of the agricultural sector.</p>
+                    <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                        <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                        <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                        <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="ftco-footer-widget mb-4 ml-md-5">
+                    <h2 class="ftco-heading-2">Menu</h2>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="py-2 d-block">Shop</a></li>
+                        <li><a href="#" class="py-2 d-block">About Us</a></li>
+                        <li><a href="#" class="py-2 d-block">Services</a></li>
+                        <li><a href="#" class="py-2 d-block">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="ftco-footer-widget mb-4">
+                    <h2 class="ftco-heading-2">Help</h2>
+                    <div class="d-flex">
+                        <ul class="list-unstyled mr-l-5 pr-l-3 mr-4">
+                            <li><a href="#" class="py-2 d-block">Shipping Information</a></li>
+                            <li><a href="#" class="py-2 d-block">Returns &amp; Exchange</a></li>
+                            <li><a href="#" class="py-2 d-block">Terms &amp; Conditions</a></li>
+                            <li><a href="#" class="py-2 d-block">Privacy Policy</a></li>
+                        </ul>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="py-2 d-block">FAQs</a></li>
+                            <li><a href="#" class="py-2 d-block">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="ftco-footer-widget mb-4">
+                    <h2 class="ftco-heading-2">Have a Question?</h2>
+                    <div class="block-23 mb-3">
+                        <ul>
+                            <li><span class="icon icon-map-marker"></span><span class="text">203 Agricultural Street, Tunis, Tunisia</span></li>
+                            <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
+                            <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@efirma.com</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <p>
+                    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | E-Firma is committed to promoting sustainable agriculture practices and intelligent farming solutions.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+{# Scripts #}
+<script src="{{ asset('FrontOffice/js/main.js') }}"></script>
+<script src="{{ asset('FrontOffice/js/jquery.min.js') }}"></script>
+<script src="{{ asset('FrontOffice/js/jquery-migrate-3.0.1.min.js') }}"></script>
+<script src="{{ asset('FrontOffice/js/popper.min.js') }}"></script>
+<script src="{{ asset('FrontOffice/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('FrontOffice/js/jquery.easing.1.3.js') }}"></script>
+<script src="{{ asset('FrontOffice/js/jquery.waypoints.min.js') }}"></script>
+<script src="{{ asset('FrontOffice/js/jquery.stellar.min.js') }}"></script>
+<script src="{{ asset('FrontOffice/js/owl.carousel.min.js') }}"></script>
+<script src="{{ asset('FrontOffice/js/jquery.magnific-popup.min.js') }}"></script>
+<script src="{{ asset('FrontOffice/js/aos.js') }}"></script>
+<script src="{{ asset('FrontOffice/js/jquery.animateNumber.min.js') }}"></script>
+<script src="{{ asset('FrontOffice/js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ asset('FrontOffice/js/scrollax.min.js') }}"></script>
+<script src="{{ asset('FrontOffice/js/google-map.js') }}"></script>
+<script src="{{ asset('FrontOffice/js/main.js') }}"></script>
+<script>
+    AOS.init();
+</script>
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>

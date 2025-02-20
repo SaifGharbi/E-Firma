@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CultureParcelle index{% endblock %}
+
+{% block body %}
+
+    <div class="hero-wrap hero-bread" style="background-image: url('{{ asset('FrontOffice/images/bg_1.jpg') }}');">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{{ path('app_home') }}">Home</a></span> <span>Liste Des Cultures</span></p>
+                <h1 class="mb-0 bread">Liste Des Cultures</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <section class="container my-5">
+
+    <table class="table table-striped mt-4">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Parcelle</th>
+                    <th>Type de culture</th>
+                    <th>Date de plantation</th>
+                    <th>Date de récolte prévue</th>
+                    <th>Rendement estimé</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for culture_parcelle in culture_parcelles %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('app_parcelle_show', {'id': culture_parcelle.parcelle.id}) }}">
+                                {{ culture_parcelle.parcelle.Nom }}
+                            </a>
+                        </td>
+                        <td>{{ culture_parcelle.typeCulture }}</td>
+                        <td>{{ culture_parcelle.datePlantation ? culture_parcelle.datePlantation|date('d/m/Y') : '' }}</td>
+                        <td>{{ culture_parcelle.dateRecolte ? culture_parcelle.dateRecolte|date('d/m/Y') : '' }}</td>
+                        <td>{{ culture_parcelle.rendementEstime }}</td>
+                        <td>
+                            <a href="{{ path('app_culture_parcelle_show', {'id': culture_parcelle.id}) }}" class="btn btn-info btn-sm">Voir</a>
+                            <a href="{{ path('app_culture_parcelle_edit', {'id': culture_parcelle.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                            <form action="{{ path('app_culture_parcelle_delete', {'id': culture_parcelle.id}) }}" method="post" style="display:inline;">
+                                <button class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="text-center">Aucune culture parcelle trouvée</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+{% endblock %}

@@ -1,0 +1,9 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+culture_new:
+    path: /culture/new/{parcelle_id}
+    controller: App\Controller\CultureParcelleController::new

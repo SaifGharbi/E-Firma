@@ -1,0 +1,14 @@
+<div class="col-md-12">
+    <h5 class="mt-4 text-primary">Order Summary</h5>
+    <ul class="list-group mb-3">
+        <li class="list-group-item d-flex justify-content-between">
+            <strong>Total:</strong> <span>{{ livraison.commande.total ?? '0' }} TND</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between">
+            <strong>Date:</strong> <span>{{ livraison.commande.date ? livraison.commande.date|date('Y-m-d') : 'N/A' }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between">
+            <strong>Order Status:</strong> <span class="text-success">Treated</span>
+        </li>
+    </ul>
+</div>

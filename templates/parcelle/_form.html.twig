@@ -1,0 +1,37 @@
+{% block form %}
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+<div class="card shadow-sm p-4">
+    <h3 class="text-center text-primary">Détails De La parcelle</h3>
+    {{ form_start(form) }}
+    <div class="form-group mb-3">
+        {{ form_label(form.nom, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom de la parcelle'}}) }}
+        <div class="text-danger">
+            {{ form_errors(form.nom) }}
+        </div>
+    </div>
+
+    <div class="form-group mb-3">
+        {{ form_label(form.superficie, 'Superficie (ha)', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.superficie, {'attr': {'class': 'form-control', 'placeholder': 'Superficie de la parcelle'}}) }}
+        <div class="text-danger">
+            {{ form_errors(form.superficie) }}
+        </div>
+    </div>
+
+    <div class="form-group mb-3">
+        {{ form_label(form.localisation, 'Localisation', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.localisation, {'attr': {'class': 'form-control', 'placeholder': 'Localisation de la parcelle'}}) }}
+        <div class="text-danger">
+            {{ form_errors(form.localisation) }}
+        </div>
+    </div>
+
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+    {{ form_end(form) }}
+</div>
+
+{{ form_end(form) }}
+{% endblock %}

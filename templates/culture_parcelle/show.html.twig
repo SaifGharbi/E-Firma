@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CultureParcelle{% endblock %}
+
+{% block body %}
+    <div class="hero-wrap hero-bread" style="background-image: url('{{ asset('FrontOffice/images/bg_1.jpg') }}');">
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate text-center">
+                    <p class="breadcrumbs">
+                        <span class="mr-2"><a href="{{ path('app_home') }}">Accueil</a></span> 
+                        <span>Culture Parcelle</span>
+                    </p>
+                    <h1 class="mb-0 bread">Détails de la Culture Parcelle: {{ culture_parcelle.typeCulture }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="container my-5">
+    <table class="table table-striped mt-4">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Type de culture</th>
+                    <th>Date de plantation</th>
+                    <th>Date de récolte prévue</th>
+                    <th>Rendement Estimé (Kg) </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ culture_parcelle.typeCulture }}</td>
+                    <td>{{ culture_parcelle.datePlantation ? culture_parcelle.datePlantation|date('d/m/Y') : '' }}</td>
+                    <td>{{ culture_parcelle.dateRecolte ? culture_parcelle.dateRecolte|date('d/m/Y') : '' }}</td>
+                    <td>{{ culture_parcelle.rendementEstime }} kg</td>
+                    
+                </tr>
+            </tbody>
+    </table>
+    
+   <div class="row no-gutters slider-text align-items-center justify-content-center">
+    <a href="{{ path('app_culture_parcelle_index') }}" "class="btn btn-primary">Retourner A La Liste</a>
+
+    <a href="{{ path('app_culture_parcelle_edit', {'id': culture_parcelle.id}) }} "class="btn btn-warning">Modifier</a>
+
+    {{ include('culture_parcelle/_delete_form.html.twig') }}
+    </div>
+    </section>
+{% endblock %}

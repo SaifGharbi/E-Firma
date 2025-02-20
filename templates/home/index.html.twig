@@ -1,0 +1,195 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}E-Firma{% endblock %}
+
+{% block body %}
+    <section id="home-section" class="hero">
+        <div class="home-slider owl-carousel">
+            <div class="slider-item" style="background-image: url('{{ asset('FrontOffice/images/Farm2.jpg') }}');">
+                <div class="overlay"></div>
+                <div class="container">
+                    <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
+                        <div class="col-md-12 ftco-animate text-center">
+                            <h1 class="mb-2">Cultivez l'Avenir de l'Agriculture Durable</h1>
+                            <h2 class="subheading mb-4">Des solutions intelligentes pour des récoltes prospères</h2>
+                            <p><a href="#" class="btn btn-primary">Découvrir Plus</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slider-item" style="background-image: url('{{ asset('FrontOffice/images/Farm2.jpg') }}');">
+                <div class="overlay"></div>
+                <div class="container">
+                    <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
+                        <div class="col-sm-12 ftco-animate text-center">
+                            <h1 class="mb-2">Optimisez Votre Production Agricole</h1>
+                            <h2 class="subheading mb-4">Gestion efficace des cultures et des ressources</h2>
+                            <p><a href="#" class="btn btn-primary">Voir Nos Services</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center mb-3 pb-3">
+                <div class="col-md-12 heading-section text-center ftco-animate">
+                    <span class="subheading">Featured Products</span>
+                    <h2 class="mb-4">Our Products</h2>
+                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-lg-3 ftco-animate">
+                    <div class="product">
+                        <a href="#" class="img-prod"><img class="img-fluid" src="{{ asset('FrontOffice/images/product-1.jpg') }}" alt="Colorlib Template">
+                            <span class="status">30%</span>
+                            <div class="overlay"></div>
+                        </a>
+                        <div class="text py-3 pb-4 px-3 text-center">
+                            <h3><a href="#">Bell Pepper</a></h3>
+                            <div class="d-flex">
+                                <div class="pricing">
+                                    <p class="price"><span class="mr-2 price-dc">$120.00</span><span class="price-sale">$80.00</span></p>
+                                </div>
+                            </div>
+                            <div class="bottom-area d-flex px-3">
+                                <div class="m-auto d-flex">
+                                    <a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
+                                        <span><i class="ion-ios-menu"></i></span>
+                                    </a>
+                                    <a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
+                                        <span><i class="ion-ios-cart"></i></span>
+                                    </a>
+                                    <a href="#" class="heart d-flex justify-content-center align-items-center ">
+                                        <span><i class="ion-ios-heart"></i></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other product items... -->
+
+            </div>
+        </div>
+    </section>
+
+    <section class="ftco-section img" style="background-image: url('{{ asset('FrontOffice/images/bg_3.jpg') }}');">
+        <div class="container">
+            <div class="row justify-content-end">
+                <div class="col-md-6 heading-section ftco-animate deal-of-the-day ftco-animate">
+                    <span class="subheading">Nos Services</span>
+                    <h2 class="mb-4">Solutions Innovantes pour l'Agriculture Durable</h2>
+                    <p>Chez E-Firma, nous révolutionnons l’agriculture grâce à des outils intelligents et des services dédiés pour optimiser chaque étape de votre production.</p>
+                    <ul class="list-unstyled">
+                        <li><strong>🌱 Gestion des Parcelles :</strong> Suivi intelligent des cultures et des ressources.</li>
+                        <li><strong>🚜 Gestion des Produits :</strong> Optimisation des stocks et de la chaîne d’approvisionnement.</li>
+                        <li><strong>📦 Gestion des Commandes :</strong> Suivi des livraisons en temps réel et gestion des expéditions.</li>
+                        <li><strong>🤝 Prise de Rendez-vous :</strong> Planification simplifiée des services agricoles.</li>
+                    </ul>
+                    <p class="mt-4">
+                        <a href="services.html" class="btn btn-success">Rejoignez nous et beneficiez des meilleurs services!</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ftco-section testimony-section">
+        <div class="container">
+            <div class="row justify-content-center mb-5 pb-3">
+                <div class="col-md-7 heading-section ftco-animate text-center">
+                    <span class="subheading">Temoins</span>
+                    <h2 class="mb-4">Nos Clients Satisfaits disent</h2>
+                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in</p>
+                </div>
+            </div>
+            <div class="row ftco-animate">
+                <div class="col-md-12">
+                    <div class="carousel-testimony owl-carousel">
+                        <div class="item">
+                            <div class="testimony-wrap p-4 pb-5">
+                                <div class="user-img mb-5" style="background-image: url('{{ asset('FrontOffice/images/person_1.jpg') }}')">
+                                    <span class="quote d-flex align-items-center justify-content-center">
+                                        <i class="icon-quote-left"></i>
+                                    </span>
+                                </div>
+                                <div class="text text-center">
+                                    <p class="mb-5 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                                    <p class="name">Garreth Smith</p>
+                                    <span class="position">Marketing Manager</span>
+                                </div>
+                            </div>
+                        </div>
+
+<div class="item">
+                        <div class="testimony-wrap p-4 pb-5">
+                            <div class="user-img mb-5" style="background-image: url('{{ asset('FrontOffice/images/person_2.jpg')}}')">
+                    <span class="quote d-flex align-items-center justify-content-center">
+                      <i class="icon-quote-left"></i>
+                    </span>
+                            </div>
+                            <div class="text text-center">
+                                <p class="mb-5 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                                <p class="name">Garreth Smith</p>
+                                <span class="position">Interface Designer</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="testimony-wrap p-4 pb-5">
+                            <div class="user-img mb-5" style="background-image: url('{{ asset('FrontOffice/images/person_3.jpg')}}')">
+                    <span class="quote d-flex align-items-center justify-content-center">
+                      <i class="icon-quote-left"></i>
+                    </span>
+                            </div>
+                            <div class="text text-center">
+                                <p class="mb-5 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                                <p class="name">Garreth Smith</p>
+                                <span class="position">UI Designer</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="testimony-wrap p-4 pb-5">
+                            <div class="user-img mb-5" style="background-image: url('{{ asset('FrontOffice/images/person_1.jpg')}}')">
+                    <span class="quote d-flex align-items-center justify-content-center">
+                      <i class="icon-quote-left"></i>
+                    </span>
+                            </div>
+                            <div class="text text-center">
+                                <p class="mb-5 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                                <p class="name">Garreth Smith</p>
+                                <span class="position">Web Developer</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="testimony-wrap p-4 pb-5">
+                            <div class="user-img mb-5" style="background-image: url('{{ asset('FrontOffice/images/person_1.jpg')}}')">
+                    <span class="quote d-flex align-items-center justify-content-center">
+                      <i class="icon-quote-left"></i>
+                    </span>
+                            </div>
+                            <div class="text text-center">
+                                <p class="mb-5 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                                <p class="name">Garreth Smith</p>
+                                <span class="position">System Analyst</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    </body>
+{% endblock %}

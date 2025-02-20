@@ -1,0 +1,41 @@
+{# Formulaire de modification d'une CultureParcelle #}
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+<div class="card shadow-sm p-4">
+    <h3 class="text-center text-success">Culture Parcelle</h3>
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+    <div class="form-group mb-3">
+        {{ form_label(form.type_culture) }}
+        {{ form_widget(form.type_culture, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.type_culture) }}
+    </div>
+
+    <div class="form-group mb-3">
+        {{ form_label(form.date_plantation) }}
+        {{ form_widget(form.date_plantation, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.date_plantation) }}
+    </div>
+
+    <div class="form-group mb-3">
+        {{ form_label(form.date_recolte) }}
+        {{ form_widget(form.date_recolte, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.date_recolte) }}
+    </div>
+
+    <div class="form-group mb-3">
+        {{ form_label(form.rendement_estime) }}
+        {{ form_widget(form.rendement_estime, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.rendement_estime) }}
+    </div>
+
+    <div class="form-group mb-3">
+        {# Parcelle is pre-selected, so we hide it #}
+    {{ form_widget(form.parcelle, {'attr': {'class': 'form-control', 'style': 'display: none;'}}) }}
+    </div>
+
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary px-4">Enregistrer</button>
+    </div>
+</div>
+{{ form_end(form) }}

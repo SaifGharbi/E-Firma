@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Parcelle{% endblock %}
+
+{% block body %}
+    <div class="hero-wrap hero-bread" style="background-image: url('{{ asset('FrontOffice/images/bg_1.jpg') }}');">
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate text-center">
+                    <p class="breadcrumbs">
+                        <span class="mr-2"><a href="{{ path('app_home') }}">Accueil</a></span> 
+                        <span>Parcelle</span>
+                    </p>
+                    <h1 class="mb-0 bread">Détails de la Parcelle</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="ftco-section ftco-degree-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 ftco-animate">
+                    <div class="parcelle-details">
+                        <h2 class="mb-3">{{ parcelle.nom|e }} - Détails</h2>
+                        <div class="details-wrapper">
+                            <div class="detail-item">
+                                <strong>Nom:</strong> <span>{{ parcelle.nom|e }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Superficie:</strong> <span>{{ parcelle.superficie|number_format(2, '.', ' ') }} m²</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Localisation:</strong> <span>{{ parcelle.localisation|e }}</span>
+                            </div>
+                        </div>
+
+                        <h3 class="mt-5 mb-3">Informations sur les Cultures</h3>
+                        {% if cultureParcelles is not empty %}
+                            <div class="culture-list">
+                                {% for culture in cultureParcelles %}
+                                    <div class="culture-item">
+                                        <h4>{{ culture.typeCulture|e }}</h4>
+                                        <p><strong>Date de Plantation:</strong> {{ culture.datePlantation ? culture.datePlantation|date('d/m/Y') : 'Non définie' }}</p>
+                                        <p><strong>Date de Récolte:</strong> {{ culture.dateRecolte ? culture.dateRecolte|date('d/m/Y') : 'Non définie' }}</p>
+                                        <p><strong>Rendement Estimé:</strong> {{ culture.rendementEstime|number_format(2, '.', ' ') }} kg</p>
+                                    </div>
+                                    <hr>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-muted">Aucune donnée de culture disponible pour cette parcelle.</p>
+                        {% endif %}
+
+                        <div class="mt-4">
+                            <a href="{{ path('app_parcelle_edit', {'id': parcelle.id}) }}" class="btn btn-primary py-2 px-3">Modifier</a>
+                             <a href="{{ path('app_parcelle_delete', {'id': parcelle.id}) }}" class="btn btn-danger py-2 px-3">Supprimer</a>
+                            <a href="{{ path('app_parcelle_index') }}" class="btn btn-secondary py-2 px-3">Retour à la liste</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

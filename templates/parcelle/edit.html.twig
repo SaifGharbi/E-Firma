@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la Parcelle{% endblock %}
+
+{% block body %}
+    <section class="container my-5">
+
+        <!-- Card for Edit Form -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h2 class="text-center text-primary">Modifier La Parcelle</h2>
+                <!-- Include the edit form, passing 'button_label' for the Update button -->
+                {{ include('parcelle/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+            </div>
+        </div>
+
+        <!-- Back Link -->
+        <div class="text-center mt-4">
+            <a href="{{ path('app_parcelle_index') }}" class="btn btn-secondary">Retour à la liste</a>
+        </div>
+
+        <!-- Delete Form -->
+        <div class="text-center mt-4">
+            {{ include('parcelle/_delete_form.html.twig') }}
+        </div>
+    </section>
+{% endblock %}
