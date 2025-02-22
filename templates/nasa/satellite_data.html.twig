@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}NASA Satellite Data for Agriculture{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">NASA Satellite Image and Data for Tunisia</h1>
+
+        <div class="row justify-content-center">
+            {% if nasa_data.image_url %}
+                <div class="col-lg-8 col-md-10">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body">
+                            <h4 class="card-title text-center">Satellite Image</h4>
+                            <div class="text-center">
+                                <img src="{{ nasa_data.image_url }}" alt="Satellite Image of Tunisia" class="img-fluid rounded shadow-sm">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12 text-center">
+                    <p class="text-warning">No satellite image available.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-8 col-md-10">
+                {% if nasa_data %}
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h4 class="card-title text-center">Agriculture Satellite Data</h4>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <strong>Date:</strong> {{ nasa_data.date | date("F j, Y, g:i a") }}
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Cloud Coverage:</strong> 
+                                    {% if nasa_data.cloud_coverage == 'N/A' %}
+                                        No data available
+                                    {% else %}
+                                        {{ nasa_data.cloud_coverage }}%
+                                    {% endif %}
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Dataset:</strong> 
+                                    <a href="https://earthdata.nasa.gov/search/collections?keywords={{ nasa_data.dataset }}" target="_blank">{{ nasa_data.dataset }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Location:</strong> Latitude {{ nasa_data.location.latitude }}, Longitude {{ nasa_data.location.longitude }}
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="alert alert-danger text-center mt-3">
+                        No satellite data available for agriculture.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

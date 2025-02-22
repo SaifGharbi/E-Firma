@@ -32,31 +32,57 @@
                             </div>
                             <div class="detail-item">
                                 <strong>Localisation:</strong> <span>{{ parcelle.localisation|e }}</span>
+                                <a href="https://www.google.com/maps/search/?q={{ parcelle.localisation|url_encode }}"
+                                    class="btn btn-sm btn-success" target="_blank" title="Voir sur la carte">
+                                    <i class="icon-map"></i>
+                                </a>
                             </div>
                         </div>
+                        
+                                <a href="{{ path('app_nasa_data') }}" class="btn btn-outline-secondary">
+                                    <i class="icon-map"></i> Nasa Satellite Image
+                                </a>
 
                         <h3 class="mt-5 mb-3">Informations sur les Cultures</h3>
-                        {% if cultureParcelles is not empty %}
+                        {% if parcelle.cultureParcelles is not empty %}
                             <div class="culture-list">
-                                {% for culture in cultureParcelles %}
-                                    <div class="culture-item">
+                                {% for culture in parcelle.cultureParcelles %}
+                                    <div class="culture-item card p-3 mb-3">
                                         <h4>{{ culture.typeCulture|e }}</h4>
                                         <p><strong>Date de Plantation:</strong> {{ culture.datePlantation ? culture.datePlantation|date('d/m/Y') : 'Non définie' }}</p>
                                         <p><strong>Date de Récolte:</strong> {{ culture.dateRecolte ? culture.dateRecolte|date('d/m/Y') : 'Non définie' }}</p>
                                         <p><strong>Rendement Estimé:</strong> {{ culture.rendementEstime|number_format(2, '.', ' ') }} kg</p>
+                                        <div class="actions">
+                                            <a href="{{ path('app_culture_parcelle_show', {'id': culture.id}) }}" class="btn btn-sm btn-info">Voir</a>
+                                            <a href="{{ path('app_culture_parcelle_edit', {'id': culture.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+                                        </div>
                                     </div>
-                                    <hr>
                                 {% endfor %}
                             </div>
                         {% else %}
-                            <p class="text-muted">Aucune donnée de culture disponible pour cette parcelle.</p>
+                            <p class="text-muted">Aucune culture associée à cette parcelle.</p>
                         {% endif %}
 
-                        <div class="mt-4">
-                            <a href="{{ path('app_parcelle_edit', {'id': parcelle.id}) }}" class="btn btn-primary py-2 px-3">Modifier</a>
-                             <a href="{{ path('app_parcelle_delete', {'id': parcelle.id}) }}" class="btn btn-danger py-2 px-3">Supprimer</a>
-                            <a href="{{ path('app_parcelle_index') }}" class="btn btn-secondary py-2 px-3">Retour à la liste</a>
-                        </div>
+                        <div class="mt-4 d-flex justify-content-between">
+    <a href="{{ path('app_parcelle_index') }}" class="btn btn-outline-secondary">
+        <i class="icon-arrow-left"></i> Retour à la liste
+    </a>
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Actions
+        </button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item text-info" href="{{ path('app_parcelle_edit', {'id': parcelle.id}) }}">
+                <i class="icon-pencil"></i> Modifier
+            </a>
+            <a class="dropdown-item text-danger" href="{{ path('app_parcelle_delete', {'id': parcelle.id}) }}">
+                <i class="icon-trash"></i> Supprimer
+            </a>
+        </div>
+    </div>
+</div>
+
                     </div>
                 </div>
             </div>

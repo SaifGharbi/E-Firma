@@ -15,10 +15,25 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ParcelleController extends AbstractController
 {
     #[Route(name: 'app_parcelle_index', methods: ['GET'])]
-    public function index(ParcelleRepository $parcelleRepository): Response
+    public function index(Request $request, ParcelleRepository $parcelleRepository): Response
     {
+        $search = $request->query->get('search');
+        $filterSuperficie = $request->query->get('filter_superficie');
+        $filterCulture = $request->query->get('filter_culture');
+        
+        // If search is provided, filter the results
+        if ($search || $filterSuperficie || $filterCulture) {
+            $parcelles = $parcelleRepository->findBySearchAndFilters($search, $filterSuperficie, $filterCulture);
+        } else {
+            $parcelles = $parcelleRepository->findAll();
+        }
+
+
         return $this->render('parcelle/index.html.twig', [
-            'parcelles' => $parcelleRepository->findAll(),
+            'parcelles' => $parcelles,
+            'search' => $search, // Pass search query to template
+            'filterSuperficie' => $filterSuperficie,
+            'filterCulture' => $filterCulture,
         ]);
     }
 

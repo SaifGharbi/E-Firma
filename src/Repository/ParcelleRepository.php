@@ -40,4 +40,39 @@ class ParcelleRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findBySearch(string $search): array
+{
+    return $this->createQueryBuilder('p')
+        ->where('p.nom LIKE :search OR p.localisation LIKE :search')
+        ->setParameter('search', '%' . $search . '%')
+        ->getQuery()
+        ->getResult();
+}
+
+// In your ParcelleRepository
+public function findBySearchAndFilters(?string $search, ?string $filterSuperficie, ?string $filterCulture): array
+{
+    $queryBuilder = $this->createQueryBuilder('p');
+
+    // Apply search filter
+    if ($search) {
+        $queryBuilder->andWhere('p.nom LIKE :search OR p.localisation LIKE :search')
+                     ->setParameter('search', '%' . $search . '%');
+    }
+
+    // Apply Superficie filter
+    if ($filterSuperficie) {
+        $queryBuilder->andWhere('p.superficie = :superficie')
+                     ->setParameter('superficie', $filterSuperficie);
+    }
+
+    // Apply Culture filter
+    if ($filterCulture) {
+        $queryBuilder->andWhere('p.cultureParcelles IS NOT EMPTY');
+    }
+
+    return $queryBuilder->getQuery()->getResult();
+}
+
 }

@@ -1,0 +1,1 @@
+{"cloud_score":null,"date":"2025-02-02T09:55:26.834000","id":"LANDSAT/LC08/C02/T1_L2/LC08_191036_20250202","resource":{"dataset":"LANDSAT/LC08/C02/T1_L2","planet":"earth"},"service_version":"v5000","url":"https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/thumbnails/f262f02efa64bd15c36e4e32c6de2480-9558bfa76ecc9c02824a05a97b1faf42:getPixels"}

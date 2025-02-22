@@ -35,7 +35,6 @@ class Produit
 
     public function __construct()
     {
-        $this->commande = new ArrayCollection();
     }
 
     public function getId(): ?int

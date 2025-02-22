@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}CultureParcelle{% endblock %}
+{% block title %}Détails de la Culture Parcelle{% endblock %}
 
 {% block body %}
     <div class="hero-wrap hero-bread" style="background-image: url('{{ asset('FrontOffice/images/bg_1.jpg') }}');">
@@ -16,33 +16,65 @@
             </div>
         </div>
     </div>
-    <section class="container my-5">
-    <table class="table table-striped mt-4">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Type de culture</th>
-                    <th>Date de plantation</th>
-                    <th>Date de récolte prévue</th>
-                    <th>Rendement Estimé (Kg) </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ culture_parcelle.typeCulture }}</td>
-                    <td>{{ culture_parcelle.datePlantation ? culture_parcelle.datePlantation|date('d/m/Y') : '' }}</td>
-                    <td>{{ culture_parcelle.dateRecolte ? culture_parcelle.dateRecolte|date('d/m/Y') : '' }}</td>
-                    <td>{{ culture_parcelle.rendementEstime }} kg</td>
-                    
-                </tr>
-            </tbody>
-    </table>
-    
-   <div class="row no-gutters slider-text align-items-center justify-content-center">
-    <a href="{{ path('app_culture_parcelle_index') }}" "class="btn btn-primary">Retourner A La Liste</a>
 
-    <a href="{{ path('app_culture_parcelle_edit', {'id': culture_parcelle.id}) }} "class="btn btn-warning">Modifier</a>
+    <section class="ftco-section ftco-degree-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 ftco-animate">
+                    <div class="culture-details">
+                        <h2 class="mb-3">{{ culture_parcelle.typeCulture|e }} - Détails</h2>
+                        <div class="details-wrapper">
+                            <div class="detail-item">
+                                <strong>Type de culture:</strong> <span>{{ culture_parcelle.typeCulture|e }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Date de Plantation:</strong> 
+                                <span>
+                                    {% if culture_parcelle.datePlantation %}
+                                        <i class=""oi oi-calendar-day"</i> {{ culture_parcelle.datePlantation|date('d/m/Y') }}
+                                    {% else %}
+                                        <i class=""oi oi-calendar-check"></i> Non définie
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Date de Récolte:</strong> 
+                                <span>
+                                    {% if culture_parcelle.dateRecolte %}
+                                        <i class=""oi oi-calendar"></i> {{ culture_parcelle.dateRecolte|date('d/m/Y') }}
+                                    {% else %}
+                                        <i class=""oi oi-calendar"></i> Non définie
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Rendement Estimé:</strong> 
+                                <span>{{ culture_parcelle.rendementEstime|number_format(2, '.', ' ') }} kg</span>
+                            </div>
+                        </div>
 
-    {{ include('culture_parcelle/_delete_form.html.twig') }}
-    </div>
+                        <div class="mt-4 d-flex justify-content-between">
+                            <a href="{{ path('app_culture_parcelle_index') }}" class="btn btn-outline-secondary">
+                                <i class="icon-arrow-left"></i> Retour à la liste
+                            </a>
+
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item text-info" href="{{ path('app_culture_parcelle_edit', {'id': culture_parcelle.id}) }}">
+                                        <i class="icon-pencil"></i> Modifier
+                                    </a>
+                                    <a class="dropdown-item text-danger" href="{{ path('app_culture_parcelle_delete', {'id': culture_parcelle.id}) }}">
+                                        <i class="icon-trash"></i> Supprimer
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 {% endblock %}

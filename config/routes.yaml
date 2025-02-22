@@ -7,3 +7,7 @@ controllers:
 culture_new:
     path: /culture/new/{parcelle_id}
     controller: App\Controller\CultureParcelleController::new
+
+nasa_data:
+    path: /nasa/satellite_data
+    controller: App\Controller\NASAController::getSatelliteData
