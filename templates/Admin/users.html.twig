@@ -1,0 +1,21 @@
+{% extends 'Admin/base_admin.html.twig' %}
+
+{% block title %}Users Management{% endblock %}
+
+{% block body %}
+    <h2>Users List</h2>
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.nom }}</td>
+                <td>{{ user.email }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

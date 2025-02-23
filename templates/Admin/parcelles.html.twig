@@ -1,0 +1,24 @@
+{% extends 'Admin/base_admin.html.twig' %}
+
+{% block title %}Parcelles Management{% endblock %}
+
+{% block body %}
+    <h2>Parcelles List</h2>
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Superficie</th>
+            <th>localisation</th>
+        </tr>
+        {% for parcelle in parcelles %}
+            <tr>
+                <td>{{ parcelle.id }}</td>
+                <td>{{ parcelle.nom }}</td>
+                <td>{{ parcelle.superficie }} ha</td>
+                <td>{{ parcelle.localisation }}</td>
+
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
