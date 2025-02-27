@@ -1,0 +1,153 @@
+
+{% block body %}
+    <div class="hero-wrap hero-bread" style="background-image: url('{{ asset('FrontOffice/images/bg_1.jpg') }}');">
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate text-center">
+                    <p class="breadcrumbs">
+                        <span class="mr-2"><a href="{{ path('app_home') }}">Accueil</a></span> 
+                        <span>Parcelle</span>
+                    </p>
+                    <h1 class="mb-0 bread">Détails de la Parcelle </h1>
+                </div>
+            </div>
+        </div>
+    </div>  
+
+    <section class="ftco-section ftco-degree-bg">
+
+    <div class="container py-4 bg-light text-center">
+    <div class="row">
+        <!-- Left Column: Parcel and Culture Details -->
+        <div class="col-lg-8">
+            <div class="parcelle-details ">
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary"><i class="icon-info-circle"></i>   {{ parcelle.nom|e }} - Détails</h4> 
+                        <p><strong>Nom:</strong> {{ parcelle.nom|e }}</p>
+                        <p><strong>Superficie:</strong> {{ parcelle.superficie|number_format(2, '.', ' ') }} m²</p>
+                        <p><strong>Localisation:</strong> {{ parcelle.localisation|e }}</p>
+                        <!-- OpenStreetMap Integration -->
+                        <div id="map" style="height: 400px; border-radius: 12px; border: 2px solidrgb(72, 255, 0);" class="mt-3 mb-4"></div>
+                <a href="{{ path('app_nasa_data') }}" class="btn btn-outline-secondary">
+                                    <i class="icon-map"></i> Nasa Satellite Image
+                </a>
+                    </div>
+                </div>
+            </div>
+            
+
+            <!-- Culture Information Section -->
+            <h3 class="mt-5 mb-4 text-secondary">Informations sur les Cultures</h3>
+            {% if parcelle.cultureParcelles is not empty %}
+                <div class="row">
+                    {% for culture in parcelle.cultureParcelles %}
+                        <div class="col-md-6">
+                            <div class="card mb-4 border-0 shadow-sm">
+                                <div class="card-body">
+                                    <h4 class="card-title">{{ culture.typeCulture|e }}</h4>
+                                    <p><strong>Date de Plantation:</strong> {{ culture.datePlantation ? culture.datePlantation|date('d/m/Y') : 'Non définie' }}</p>
+                                    <p><strong>Date de Récolte:</strong> {{ culture.dateRecolte ? culture.dateRecolte|date('d/m/Y') : 'Non définie' }}</p>
+                                    <p><strong>Rendement Estimé:</strong> {{ culture.rendementEstime|number_format(2, '.', ' ') }} kg</p>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="{{ path('app_culture_parcelle_show', {'id': culture.id}) }}" class="btn btn-info btn-sm">Voir</a>
+                                        <a href="{{ path('app_culture_parcelle_edit', {'id': culture.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">Aucune culture associée à cette parcelle.</p>
+            {% endif %}
+        </div>
+
+        <!-- Right Column: Weather Information -->
+        <div class="col-lg-4">
+            {% if weather %}
+                <div class="card mb-4 bg-white border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="weather-icon mb-3">
+                            <img src="http://openweathermap.org/img/wn/{{ weather.weather[0].icon }}@4x.png" 
+                                 alt="{{ weather.weather[0].description }}">
+                        </div>
+                        <h3 class="card-title">Météo à {{ parcelleLocation }}</h3>
+                        <p class="display-4 mb-1 text-primary">{{ weather.main.temp }} °C</p>
+                        <div class="weather-details">
+                            <p><i class="fas fa-thermometer-half"></i> <strong>Ressenti :</strong> {{ weather.main.feels_like }} °C</p>
+                            <p><i class="fas fa-tint"></i> <strong>Humidité :</strong> {{ weather.main.humidity }} %</p>
+                            <p><i class="fas fa-wind"></i> <strong>Vent :</strong> {{ weather.wind.speed }} m/s</p>
+                            <p><i class="fas fa-tachometer-alt"></i> <strong>Pression :</strong> {{ weather.main.pressure }} hPa</p>
+                            <p><i class="fas fa-eye"></i> <strong>Visibilité :</strong> {{ weather.visibility / 1000 }} km</p>
+                            <p><i class="fas fa-cloud"></i> <strong>Couverture Nuageuse :</strong> {{ weather.clouds.all }} %</p>
+                            <p><i class="fas fa-sun"></i> <strong>Lever du Soleil :</strong> {{ weather.sys.sunrise | date('H:i') }}</p>
+                            <p><i class="fas fa-moon"></i> <strong>Coucher du Soleil :</strong> {{ weather.sys.sunset | date('H:i') }}</p>
+                        </div>
+
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-muted">Aucune donnée météo disponible.</p>
+            {% endif %}
+        </div>
+    </div>
+
+                        <div class="mt-4 d-flex justify-content-between">
+    <a href="{{ path('app_parcelle_index') }}" class="btn btn-outline-secondary">
+        <i class="icon-arrow-left"></i> Retour à la liste
+    </a>
+    {% if is_granted('ROLE_AGRICULTEUR') %}
+    <div class="btn-group">
+    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="icon-cog"></i> Actions
+    </button>
+    <div class="dropdown-menu">
+        <a class="dropdown-item text-info" href="{{ path('app_parcelle_edit', {'id': parcelle.id}) }}">
+            <i class="icon-pencil"></i> Modifier
+        </a>
+        <a class="dropdown-item text-danger" href="{{ path('app_parcelle_delete', {'id': parcelle.id}) }}">
+            <i class="icon-trash"></i> Supprimer
+        </a>
+        <a class="dropdown-item text-success" href="{{ path('culture_new', {'parcelle_id': parcelle.id}) }}">
+            <i class="icon-leaf"></i> Ajouter Une Culture
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leaflet.js for OpenStreetMap -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+{% if weather and weather.coord %}
+    {% set latitude = weather.coord.lat %}
+    {% set longitude = weather.coord.lon %}
+{% else %}
+    {% set latitude = 48.8566 %}
+    {% set longitude = 2.3522 %}
+{% endif %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const map = L.map('map').setView([{{ latitude }}, {{ longitude }}], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.marker([{{ latitude }}, {{ longitude }}]).addTo(map)
+            .bindPopup(`<b>{{ parcelle.nom|e }}</b><br>{{ parcelle.localisation|e }}`)
+            .openPopup();
+    });
+</script>
+
+
+{% endblock %}

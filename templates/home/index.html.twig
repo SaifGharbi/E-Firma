@@ -33,6 +33,47 @@
         </div>
     </section>
 
+    <!-- Weather Widget Section -->
+    <section class="ftco-section bg-light py-5" id="weather-section">
+        <div class="container">
+            <div class="row justify-content-center mb-3">
+                <div class="col-md-12 heading-section text-center ftco-animate">
+                    <span class="subheading">Météo Locale</span>
+                    <h2 class="mb-4">Conditions Météorologiques</h2>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="weather-widget p-4 text-center bg-white shadow rounded">
+                        <div id="weather-loading" class="text-center">
+                            <i class="icon-spin4 animate-spin"></i> Chargement des données météo...
+                        </div>
+                        <div id="weather-content" style="display: none;">
+                            <div class="weather-icon mb-3">
+                                <img id="weather-icon" src="" alt="Weather Icon" style="width: 100px;">
+                            </div>
+                            <div class="weather-info">
+                                <h3 id="weather-location" class="mb-3">--</h3>
+                                <div class="temperature">
+                                    <span id="weather-temp" class="h2">--</span>
+                                    <span class="h4">°C</span>
+                                </div>
+                                <p id="weather-description" class="mb-2">--</p>
+                                <div class="weather-details mt-3">
+                                    <span id="weather-humidity" class="mr-3"><i class="icon-droplet"></i> Humidité: --%</span>
+                                    <span id="weather-wind"><i class="icon-wind"></i> Vent: -- km/h</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="weather-error" class="text-danger" style="display: none;">
+                            Impossible de charger les données météo.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="ftco-section">
         <div class="container">
             <div class="row justify-content-center mb-3 pb-3">
@@ -87,10 +128,10 @@
                 <div class="col-md-6 heading-section ftco-animate deal-of-the-day ftco-animate">
                     <span class="subheading">Nos Services</span>
                     <h2 class="mb-4">Solutions Innovantes pour l'Agriculture Durable</h2>
-                    <p>Chez E-Firma, nous révolutionnons l’agriculture grâce à des outils intelligents et des services dédiés pour optimiser chaque étape de votre production.</p>
+                    <p>Chez E-Firma, nous révolutionnons l'agriculture grâce à des outils intelligents et des services dédiés pour optimiser chaque étape de votre production.</p>
                     <ul class="list-unstyled">
                         <li><strong>🌱 Gestion des Parcelles :</strong> Suivi intelligent des cultures et des ressources.</li>
-                        <li><strong>🚜 Gestion des Produits :</strong> Optimisation des stocks et de la chaîne d’approvisionnement.</li>
+                        <li><strong>🚜 Gestion des Produits :</strong> Optimisation des stocks et de la chaîne d'approvisionnement.</li>
                         <li><strong>📦 Gestion des Commandes :</strong> Suivi des livraisons en temps réel et gestion des expéditions.</li>
                         <li><strong>🤝 Prise de Rendez-vous :</strong> Planification simplifiée des services agricoles.</li>
                     </ul>
@@ -192,4 +233,77 @@
 </section>
 
     </body>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const weatherWidget = {
+        init: function() {
+            this.getLocation();
+        },
+        getLocation: function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => this.fetchWeather(position.coords.latitude, position.coords.longitude),
+                    error => this.handleLocationError(error)
+                );
+            } else {
+                this.showError("La géolocalisation n'est pas supportée par votre navigateur.");
+            }
+        },
+        fetchWeather: async function(lat, lon) {
+            try {
+                const response = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
+                if (!response.ok) throw new Error('Erreur réseau');
+                const result = await response.json();
+                
+                if (result.success) {
+                    this.displayWeather(result.data);
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                this.showError("Impossible de charger les données météo.");
+            }
+        },
+        displayWeather: function(data) {
+            document.getElementById('weather-loading').style.display = 'none';
+            document.getElementById('weather-content').style.display = 'block';
+            
+            document.getElementById('weather-location').textContent = data.location;
+            document.getElementById('weather-temp').textContent = data.temperature;
+            document.getElementById('weather-description').textContent = data.description;
+            document.getElementById('weather-humidity').innerHTML = `<i class="icon-droplet"></i> Humidité: ${data.humidity}%`;
+            document.getElementById('weather-wind').innerHTML = `<i class="icon-wind"></i> Vent: ${data.wind} km/h`;
+            document.getElementById('weather-icon').src = `https://openweathermap.org/img/wn/${data.icon}@2x.png`;
+        },
+        showError: function(message) {
+            document.getElementById('weather-loading').style.display = 'none';
+            document.getElementById('weather-error').style.display = 'block';
+            document.getElementById('weather-error').textContent = message;
+        },
+        handleLocationError: function(error) {
+            let message = "Erreur de géolocalisation: ";
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    message += "Accès refusé à la géolocalisation.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    message += "Position non disponible.";
+                    break;
+                case error.TIMEOUT:
+                    message += "Délai d'attente dépassé.";
+                    break;
+                default:
+                    message += "Erreur inconnue.";
+            }
+            this.showError(message);
+        }
+    };
+
+    weatherWidget.init();
+});
+</script>
 {% endblock %}

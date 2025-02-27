@@ -1,37 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ProduitCategorie index{% endblock %}
+{% block title %}Liste des Catégories{% endblock %}
 
 {% block body %}
-    <h1>ProduitCategorie index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Description</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for produit_categorie in produit_categories %}
-            <tr>
-                <td>{{ produit_categorie.id }}</td>
-                <td>{{ produit_categorie.nom }}</td>
-                <td>{{ produit_categorie.description }}</td>
-                <td>
-                    <a href="{{ path('app_produit_categorie_show', {'id': produit_categorie.id}) }}">show</a>
-                    <a href="{{ path('app_produit_categorie_edit', {'id': produit_categorie.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_produit_categorie_new') }}">Create new</a>
+    {{ include('produit_categorie/_content.html.twig') }}
 {% endblock %}

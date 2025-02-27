@@ -10,30 +10,44 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Service\WeatherService;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[Route('/parcelle')]
 final class ParcelleController extends AbstractController
 {
+    private $weatherService;
+
+    public function __construct(WeatherService $weatherService)
+    {
+        $this->weatherService = $weatherService;
+    }
+
     #[Route(name: 'app_parcelle_index', methods: ['GET'])]
     public function index(Request $request, ParcelleRepository $parcelleRepository): Response
     {
         $search = $request->query->get('search');
         $filterSuperficie = $request->query->get('filter_superficie');
-        $filterCulture = $request->query->get('filter_culture');
+        $filterCultureStatus = $request->query->get('filter_culture_status');
+
+    $parcelles = $parcelleRepository->findBySearchAndFilters($search, $filterSuperficie, $filterCultureStatus);
         
-        // If search is provided, filter the results
-        if ($search || $filterSuperficie || $filterCulture) {
-            $parcelles = $parcelleRepository->findBySearchAndFilters($search, $filterSuperficie, $filterCulture);
+        if ($search || $filterSuperficie || $filterCultureStatus) {
+            $parcelles = $parcelleRepository->findBySearchAndFilters($search, $filterSuperficie, $filterCultureStatus);
         } else {
             $parcelles = $parcelleRepository->findAll();
         }
 
+        // Choose template based on user role
+        $template = $this->isGranted('ROLE_ADMIN') 
+            ? 'parcelle/index_admin.html.twig'
+            : 'parcelle/index.html.twig';
 
-        return $this->render('parcelle/index.html.twig', [
+        return $this->render($template, [
             'parcelles' => $parcelles,
-            'search' => $search, // Pass search query to template
+            'search' => $search,
             'filterSuperficie' => $filterSuperficie,
-            'filterCulture' => $filterCulture,
+            'filterCultureStatus' => $filterCultureStatus,
         ]);
     }
 
@@ -58,13 +72,21 @@ final class ParcelleController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_parcelle_show', methods: ['GET'])]
-    public function show(Parcelle $parcelle): Response
+    public function show(Parcelle $parcelle,HttpClientInterface $httpClient): Response
     {
         $cultureParcelles = $parcelle->getCultureParcelles();
+
+        // Get the localisation for the parcelle
+        $parcelleLocation = $parcelle->getLocalisation();
+
+        // Get weather based on the parcelle's location
+        $weather = $this->weatherService->getWeatherByLocation($parcelleLocation);
 
         return $this->render('parcelle/show.html.twig', [
             'parcelle' => $parcelle,
             'cultureParcelles' => $cultureParcelles,
+            'weather' => $weather,
+            'parcelleLocation' => $parcelleLocation,
         ]);
     }
 

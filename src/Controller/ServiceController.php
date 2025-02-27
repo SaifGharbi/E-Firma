@@ -17,8 +17,15 @@ final class ServiceController extends AbstractController
     #[Route(name: 'app_service_index', methods: ['GET'])]
     public function index(ServiceRepository $serviceRepository): Response
     {
-        return $this->render('service/index.html.twig', [
-            'services' => $serviceRepository->findAll(),
+        $services = $serviceRepository->findAll();
+        
+        // Choose template based on user role
+        $template = $this->isGranted('ROLE_ADMIN') 
+            ? 'service/index_admin.html.twig'
+            : 'service/index.html.twig';
+        
+        return $this->render($template, [
+            'services' => $services,
         ]);
     }
 

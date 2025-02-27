@@ -1,0 +1,53 @@
+<div class="hero-wrap hero-bread" style="background-image: url('{{ asset('FrontOffice/images/bg_1.jpg') }}');">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{{ path('app_home') }}">Home</a></span> <span>Liste des Cultures</span></p>
+                <h1 class="mb-0 bread">Liste des Cultures</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="ftco-section ftco-degree-bg">
+    <div class="container my-5">
+        <table class="table table-hover mt-4 text-center">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Parcelle</th>
+                    <th>Type de culture</th>
+                    <th>Date de plantation</th>
+                    <th>Date de récolte prévue</th>
+                    <th>Rendement estimé</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for culture_parcelle in culture_parcelles %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('app_parcelle_show', {'id': culture_parcelle.parcelle.id}) }}">
+                                {{ culture_parcelle.parcelle.Nom }}
+                            </a>
+                        </td>
+                        <td>{{ culture_parcelle.typeCulture }}</td>
+                        <td>{{ culture_parcelle.datePlantation ? culture_parcelle.datePlantation|date('d/m/Y') : '' }}</td>
+                        <td>{{ culture_parcelle.dateRecolte ? culture_parcelle.dateRecolte|date('d/m/Y') : '' }}</td>
+                        <td>{{ culture_parcelle.rendementEstime }} kg</td>
+                        <td class="align-middle d-flex justify-content-center align-items-center flex-wrap gap-1">
+                            <a href="{{ path('app_culture_parcelle_show', {'id': culture_parcelle.id}) }}" class="btn btn-sm btn-info" title="Détails"><i class="icon-eye"></i></a>
+                            <a href="{{ path('app_culture_parcelle_edit', {'id': culture_parcelle.id}) }}" class="btn btn-sm btn-warning" title="Modifier"><i class="icon-pencil"></i></a>
+                            <form action="{{ path('app_culture_parcelle_delete', {'id': culture_parcelle.id}) }}" method="post" style="display:inline;">
+                                <button class="btn btn-sm btn-danger" title="Supprimer"><i class="icon-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">Aucune culture parcelle trouvée</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+</div>

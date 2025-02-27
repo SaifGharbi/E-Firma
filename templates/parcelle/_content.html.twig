@@ -1,0 +1,122 @@
+<div class="hero-wrap hero-bread" style="background-image: url('{{ asset('FrontOffice/images/bg_1.jpg') }}');">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{{ path('app_home') }}">Home</a></span> <span>Liste Des Parcelle</span></p>
+                <h1 class="mb-0 bread">Liste Des Parcelles</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <section class="ftco-section ftco-degree-bg">
+        <section class="container my-5">
+        <div class="card border-0 shadow-sm mb-3">
+    <div class="card-body">
+        <form method="get" class="row g-3 align-items-end">
+            
+            <!-- Search Field -->
+            <div class="col-md-4">
+                <label for="search" class="form-label">Recherche</label>
+                <input type="text" id="search" name="search" class="form-control" 
+                       placeholder="Nom ou localisation" value="{{ search }}">
+            </div>
+
+            <!-- Superficie Filter -->
+            <div class="col-md-3">
+                <label for="filter_superficie" class="form-label">Superficie Min (m²)</label>
+                <input type="number" id="filter_superficie" name="filter_superficie" 
+                       class="form-control" placeholder="Superficie min" 
+                       value="{{ filterSuperficie }}" min="1" step="1">
+            </div>
+
+            <!-- Culture Status Filter -->
+            <div class="col-md-3">
+                <label for="filter_culture_status" class="form-label">Statut des Cultures</label>
+                <select id="filter_culture_status" name="filter_culture_status" class="form-control">
+                    <option value="">Toutes les parcelles</option>
+                    <option value="with_cultures" {% if filterCultureStatus == 'with_cultures' %}selected{% endif %}>
+                        Avec cultures
+                    </option>
+                    <option value="without_cultures" {% if filterCultureStatus == 'without_cultures' %}selected{% endif %}>
+                        Sans cultures
+                    </option>
+                </select>
+            </div>
+
+            <!-- Search & Reset Buttons -->
+            <div class="col-md-2 d-flex align-items-end gap-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="icon-search"></i> Rechercher
+                </button>
+                <a href="{{ path('app_parcelle_index') }}" class="btn btn-outline-secondary w-100">
+                    <i class="icon-refresh"></i> Réinitialiser
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+        
+        <table class="table table-hover mt-4 text-center">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nom</th>
+                    <th>Superficie</th>
+                    <th>Localisation</th>
+                    <th>Cultures</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for parcelle in parcelles %}
+                    <tr>
+                        <td>{{ parcelle.nom }}</td>
+                        <td>{{ parcelle.superficie }} ha</td>
+                        <td>{{ parcelle.localisation }}</td>
+                        <td>
+                            {% if parcelle.cultureParcelles is empty %}
+                                <span class="text-muted">Aucune culture</span>
+                            {% else %}
+                                <button class="btn btn-sm btn-info" data-toggle="collapse" data-target="#cultures-{{ parcelle.id }}">
+                                <i class="icon-list"></i> Voir Cultures
+                                </button>
+                            <div id="cultures-{{ parcelle.id }}" class="collapse mt-2">
+                                <ul class="list-group">
+                                    {% for culture in parcelle.cultureParcelles %}
+                                         <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <strong>{{ culture.typeCulture }}</strong> - 
+                                                Plantée le <span class="text-success">{{ culture.datePlantation|date('d/m/Y') }}</span>, 
+                                                Récolte prévue le <span class="text-danger">{{ culture.dateRecolte|date('d/m/Y') }}</span>
+                                            </div>
+                                        <a href="{{ path('app_culture_parcelle_show', {'id': culture.id}) }}" 
+                                        class="btn btn-sm btn-primary">
+                                        <i class="icon-eye"></i> Voir
+                                        </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                        </td>
+                        <td class="align-middle d-flex justify-content-center align-items-center flex-wrap gap-1">
+                            <a href="{{ path('app_parcelle_show', {'id': parcelle.id}) }}" class="btn btn-sm btn-info" title="Détails"><i class="icon-eye"></i></a>
+                            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_AGRICULTEUR') %}
+                            <a href="{{ path('app_parcelle_edit', {'id': parcelle.id}) }}" class="btn btn-sm btn-warning" title="Modifier"><i class="icon-pencil"></i></a>
+                            <a href="{{ path('culture_new', {'parcelle_id': parcelle.id}) }}" class="btn btn-sm btn-primary" title="Ajouter une culture"><i class="icon-leaf"></i></a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">Aucune parcelle trouvée</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    </div>
+</section>

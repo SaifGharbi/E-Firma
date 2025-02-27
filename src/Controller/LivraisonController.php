@@ -18,8 +18,15 @@ final class LivraisonController extends AbstractController
     #[Route(name: 'app_livraison_index', methods: ['GET'])]
     public function index(LivraisonRepository $livraisonRepository): Response
     {
-        return $this->render('livraison/index.html.twig', [
-            'livraisons' => $livraisonRepository->findAll(),
+        $livraisons = $livraisonRepository->findAll();
+        
+        // Choose template based on user role
+        $template = $this->isGranted('ROLE_ADMIN') 
+            ? 'livraison/index_admin.html.twig'
+            : 'livraison/index.html.twig';
+        
+        return $this->render($template, [
+            'livraisons' => $livraisons,
         ]);
     }
 

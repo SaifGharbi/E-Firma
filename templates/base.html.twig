@@ -57,7 +57,7 @@
 {# Navbar #}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
-        <a class="navbar-brand" href="<#>">
+        <a class="navbar-brand" href="{{ path('app_home') }}">
             <img src="{{ asset('FrontOffice/images/logo.png') }}" alt="E-Firma Logo" style="height: 120px;">
         </a>
 
@@ -67,48 +67,73 @@
 
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active"><a href="{{ path('app_home') }}" class="nav-link">Accueil</a></li>
+            
+            {# Products Menu #}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Produits</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown04">
                     <a class="dropdown-item" href="{{ path('app_produit_index') }}">Shop</a>
-                    <a class="dropdown-item" href="{{ path('app_produit_categorie_index') }}">Categories</a>
-                    <a class="dropdown-item" href="{{ path('app_produit_new') }}">Ajouter Produits</a>
+                    {% if is_granted('ROLE_AGRICULTEUR') %}
+                        <a class="dropdown-item" href="{{ path('app_produit_new') }}">Ajouter Produits</a>
+                        <a class="dropdown-item" href="{{ path('app_produit_categorie_index') }}">Gérer Categories</a>
+                    {% endif %}
                 </div>
             </li>
 
+            {# Services Menu #}
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Service</a>
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Services</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown04">
-                    <a class="dropdown-item" href="{{ path('app_rendez_vous_index', {'type': 'TYPE_VETERINAIRE'}) }}">Service Véterinaire</a>
-                    <a class="dropdown-item" href="{{ path('app_rendez_vous_index', {'type': 'TYPE_EXPERT'}) }}">Service Experts</a>
-                    <a class="dropdown-item" href="{{ path('app_service_index') }}">Nos Services</a>
-                    <a class="dropdown-item" href="{{ path('app_rendez_vous_index') }}">Vos Rendez Vous</a>
+                    <a class="dropdown-item" href="{{ path('app_service_index') }}">Liste des Services</a>
+                    {% if is_granted('ROLE_CLIENT') or is_granted('ROLE_AGRICULTEUR') %}
+                        <a class="dropdown-item" href="{{ path('app_rendez_vous_index') }}">Mes Rendez-vous</a>
+                    {% endif %}
+                    {% if is_granted('ROLE_VETERINAIRE') %}
+                        <a class="dropdown-item" href="{{ path('app_rendez_vous_index', {'type': 'TYPE_VETERINAIRE'}) }}">Gérer Services Vétérinaires</a>
+                    {% endif %}
+                    {% if is_granted('ROLE_EXPERT') %}
+                        <a class="dropdown-item" href="{{ path('app_rendez_vous_index', {'type': 'TYPE_EXPERT'}) }}">Gérer Services Experts</a>
+                    {% endif %}
                 </div>
             </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Parcelle</a>
-                <div class="dropdown-menu" aria-labelledby="dropdown04">
-                    <a class="dropdown-item" href="{{ path('app_parcelle_index') }}">Parcelles</a>
-                    <a class="dropdown-item" href="{{ path('app_culture_parcelle_index') }}">Cultures</a>
-                    <a class="dropdown-item" href="{{ path('app_parcelle_new') }}">Ajouter parcelle</a>
-                </div>
-            </li>
-                {% if app.user %}
-                    <li class="nav-item d-flex align-items-center">
-                        <span class="nav-link">Bienvenue, {{ app.user.nom }}</span>
-                        <a href="{{ path('app_commande_index') }}" class="nav-link ms-2">
-                        <span class="icon-shopping_cart"></span> [0]
+
+            {# Parcelle Menu - Only for Agriculteurs #}
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_AGRICULTEUR') %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Parcelle</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown04">
+                        <a class="dropdown-item" href="{{ path('app_parcelle_index') }}">Mes Parcelles</a>
+                        <a class="dropdown-item" href="{{ path('app_culture_parcelle_index') }}">Mes Cultures</a>
+                        <a class="dropdown-item" href="{{ path('app_parcelle_new') }}">Ajouter Parcelle</a>
+                    </div>
+                </li>
+            {% endif %}
+
+            {# User Menu #}
+            {% if app.user %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ app.user.nom }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        {% if is_granted('ROLE_CLIENT') or is_granted('ROLE_AGRICULTEUR') %}
+                            <a class="dropdown-item" href="{{ path('app_commande_index') }}">Mes Commandes</a>
+                        {% endif %}
+                        <a class="dropdown-item" href="{{ path('app_logout') }}">Se Déconnecter</a>
+                    </div>
+                </li>
+                
+                {% if is_granted('ROLE_CLIENT') or is_granted('ROLE_AGRICULTEUR') %}
+                    <li class="nav-item">
+                        <a href="{{ path('app_commande_index') }}" class="nav-link">
+                            <span class="icon-shopping_cart"></span> [0]
                         </a>
                     </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_logout') }}">Se Déconnecter</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item"><a href="{{ path('app_login') }}" class="nav-link">Se Connecter</a></li>
-                    <li class="nav-item"><a href="{{ path('app_register') }}" class="nav-link">Creer un compte</a></li>
-                    
                 {% endif %}
+            {% else %}
+                <li class="nav-item"><a href="{{ path('app_login') }}" class="nav-link">Se Connecter</a></li>
+                <li class="nav-item"><a href="{{ path('app_register') }}" class="nav-link">Créer un compte</a></li>
+            {% endif %}
         </ul>
     </div>
 </nav>

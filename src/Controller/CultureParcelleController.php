@@ -18,8 +18,15 @@ final class CultureParcelleController extends AbstractController
     #[Route(name: 'app_culture_parcelle_index', methods: ['GET'])]
     public function index(CultureParcelleRepository $cultureParcelleRepository): Response
     {
-        return $this->render('culture_parcelle/index.html.twig', [
-            'culture_parcelles' => $cultureParcelleRepository->findAll(),
+        $cultureParcelles = $cultureParcelleRepository->findAll();
+        
+        // Choose template based on user role
+        $template = $this->isGranted('ROLE_ADMIN') 
+            ? 'culture_parcelle/index_admin.html.twig'
+            : 'culture_parcelle/index.html.twig';
+        
+        return $this->render($template, [
+            'culture_parcelles' => $cultureParcelles,
         ]);
     }
 

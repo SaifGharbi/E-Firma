@@ -22,7 +22,7 @@ final class CommandeController extends AbstractController
     {
         $commande = $session->get('commande', []);
         $commandeItems = [];
-        $total = 0; // Initialize total price
+        $total = 0;
 
         foreach ($commande as $produitId => $quantite) {
             $produit = $produitRepository->find($produitId);
@@ -31,14 +31,19 @@ final class CommandeController extends AbstractController
                     'produit' => $produit,
                     'quantity' => $quantite
                 ];
-                $total += $produit->getPrix() * $quantite; // Calculate total price
+                $total += $produit->getPrix() * $quantite;
             }
         }
 
-        return $this->render('commande/index.html.twig', [
+        // Choose template based on user role
+        $template = $this->isGranted('ROLE_ADMIN') 
+            ? 'commande/index_admin.html.twig'
+            : 'commande/index.html.twig';
+
+        return $this->render($template, [
             'commandeItems' => $commandeItems,
             'commande' => $commande,
-            'total' => $total // Pass total to template
+            'total' => $total
         ]);
     }
 

@@ -11,7 +11,9 @@ use App\Repository\ParcelleRepository;
 #[Route('/admin')]
 class AdminController extends AbstractController
 {
+    
     #[Route('/', name: 'admin_dashboard', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function dashboard(): Response
     {
         return $this->render('Admin/dashboard.html.twig');

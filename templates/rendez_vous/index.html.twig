@@ -1,71 +1,50 @@
-{% extends 'base.html.twig' %}
+{% extends is_granted('ROLE_ADMIN') ? 'base_admin.html.twig' : 'base.html.twig' %}
 
-{% block title %}RendezVous index{% endblock %}
+{% block title %}Appointments{% endblock %}
 
 {% block body %}
-    <section class="ftco-section ftco-cart">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 ftco-animate">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h2>Rendezvous List</h2>
-                        <div>
-                            <a href="{{ path('app_rendez_vous_new', {'type': 'TYPE_VETERINAIRE'}) }}" class="btn btn-primary">Add Veterinaire Rendezvous</a>
-                            <a href="{{ path('app_rendez_vous_new', {'type': 'TYPE_EXPERT'}) }}" class="btn btn-secondary">Add Expert Rendezvous</a>
-                            <a href="{{ path('app_service_new') }}" class="btn btn-success">Add New Service</a>
-                        </div>
-                    </div>
+<div class="container">
+    <h1>Appointments</h1>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Service</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for rendez_vous in rendezvousList %}
+            <tr>
+                <td>{{ rendez_vous.date ? rendez_vous.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ rendez_vous.service.nom }}</td>
+                <td>{{ rendez_vous.statut ? 'Processed' : 'Pending' }}</td>
+                <td>
+                  
+                    
+                        <a href="{{ path('app_rendez_vous_show', {'id': rendez_vous.id}) }}" 
+                           class="btn btn-sm btn-info">View</a>
+                                               {% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_AGRICULTEUR') or is_granted('ROLE_VETERINAIRE') or is_granted('ROLE_EXPERT')) %}
+                        <a href="{{ path('app_rendez_vous_edit', {'id': rendez_vous.id}) }}" 
+                           class="btn btn-sm btn-info">Edit</a>
+                        <a href="{{ path('app_rendez_vous_delete', {'id': rendez_vous.id}) }}" 
+                           class="btn btn-sm btn-danger">Delete</a>
+                    {% endif %}
 
-                    <div class="cart-list">
-                        <table class="table">
-                            <thead class="thead-primary">
-                            <tr class="text-center">
-                                <th></th>
-                                <th>Rendezvous List</th>
-                                <th></th>
-                                <th>Service</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for rendezvous in rendezvousList %}
-                                <tr class="text-center">
-                                    <td class="product-remove">
-                                        <a href="{{ path('app_rendez_vous_delete', {'id': rendezvous.id}) }}">
-                                            <span class="ion-ios-close"></span>
-                                        </a>
-                                    </td>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">No appointments found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-                                    <td class="product-name">
-                                        <h3>{{ rendezvous.service.nom }}</h3>
-                                        <p>{{ rendezvous.service.description }}</p>
-                                    </td>
-
-                                    <td class="image-prod">
-                                        <div class="img" style="background-image:url({{ asset('FrontOffice/images/person-3.jpg') }})"></div>
-                                    </td>
-
-                                    <td class="price">{{ rendezvous.service.type }}</td>
-
-                                    <td class="quantity">{{ rendezvous.date|date('Y-m-d H:i') }}</td>
-
-                                    <td class="total">
-                                    <span class="badge badge-{{ rendezvous.statut ? 'success' : 'danger' }}">
-                                        {{ rendezvous.statut ? 'Treated' : 'Untreated' }}
-                                    </span>
-                                    </td>
-                                </tr>
-                            {% else %}
-                                <tr class="text-center">
-                                    <td colspan="6">No rendezvous found</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    {% if is_granted('ROLE_CLIENT') or is_granted('ROLE_AGRICULTEUR') %}
+        <a href="{{ path('app_rendez_vous_new') }}" class="btn btn-primary">Schedule New Appointment</a>
+    {% endif %}
+</div>
 {% endblock %}

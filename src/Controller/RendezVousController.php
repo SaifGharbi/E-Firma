@@ -17,22 +17,17 @@ final class RendezVousController extends AbstractController
     #[Route(name: 'app_rendez_vous_index', methods: ['GET'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $type = $request->query->get('type'); // Get the service type parameter from the URL
 
         $repository = $entityManager->getRepository(Rendezvous::class);
 
-        if ($type) {
-            $rendezvousList = $repository->createQueryBuilder('r')
-                ->join('r.service', 's') // Join with the Service entity
-                ->where('s.type = :type') // Filter by type
-                ->setParameter('type', $type)
-                ->getQuery()
-                ->getResult();
-        } else {
-            $rendezvousList = $repository->findAll(); // Show all if no type is selected
-        }
+        $rendezvousList = $repository->findAll();
 
-        return $this->render('rendez_vous/index.html.twig', [
+        // Choose template based on user role
+        $template = $this->isGranted('ROLE_ADMIN') 
+            ? 'rendez_vous/index_admin.html.twig'
+            : 'rendez_vous/index.html.twig';
+
+        return $this->render($template, [
             'rendezvousList' => $rendezvousList,
         ]);
     }

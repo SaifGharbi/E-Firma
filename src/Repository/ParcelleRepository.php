@@ -51,28 +51,32 @@ class ParcelleRepository extends ServiceEntityRepository
 }
 
 // In your ParcelleRepository
-public function findBySearchAndFilters(?string $search, ?string $filterSuperficie, ?string $filterCulture): array
+public function findBySearchAndFilters(?string $search, ?string $filterSuperficie, ?string $filterCultureStatus): array
 {
-    $queryBuilder = $this->createQueryBuilder('p');
+    $qb = $this->createQueryBuilder('p')
+               ->leftJoin('p.cultureParcelles', 'c')
+               ->addSelect('c');
 
-    // Apply search filter
+    // 🔍 **Search by 'name' or 'location'**
     if ($search) {
-        $queryBuilder->andWhere('p.nom LIKE :search OR p.localisation LIKE :search')
-                     ->setParameter('search', '%' . $search . '%');
+        $qb->andWhere('p.nom LIKE :search OR p.localisation LIKE :search')
+           ->setParameter('search', '%' . $search . '%');
     }
 
-    // Apply Superficie filter
-    if ($filterSuperficie) {
-        $queryBuilder->andWhere('p.superficie = :superficie')
-                     ->setParameter('superficie', $filterSuperficie);
+    // 📏 **Filter by 'superficie'**
+    if (!empty($filterSuperficie) && is_numeric($filterSuperficie)) {
+        $qb->andWhere('p.superficie >= :superficie')
+           ->setParameter('superficie', (int)$filterSuperficie);
     }
 
-    // Apply Culture filter
-    if ($filterCulture) {
-        $queryBuilder->andWhere('p.cultureParcelles IS NOT EMPTY');
+    // 🌱 **Filter by 'with or without cultures'**
+    if ($filterCultureStatus === 'with_cultures') {
+        $qb->andWhere('c.id IS NOT NULL');
+    } elseif ($filterCultureStatus === 'without_cultures') {
+        $qb->andWhere('c.id IS NULL');
     }
 
-    return $queryBuilder->getQuery()->getResult();
+    return $qb->getQuery()->getResult();
 }
 
 }

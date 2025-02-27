@@ -1,34 +1,25 @@
-{% extends 'base.html.twig' %}
+{% extends is_granted('ROLE_ADMIN') ? 'base_admin.html.twig' : 'base.html.twig' %}
 
-{% block title %}Livraison{% endblock %}
+{% block title %}Delivery Details{% endblock %}
 
 {% block body %}
-    <h1>Livraison</h1>
+    <div class="container">
+        <h1>Delivery Details</h1>
+        <table class="table">
+            <tbody>
+                <tr><th>Address</th><td>{{ livraison.adresse }}</td></tr>
+                <tr><th>Date</th><td>{{ livraison.dateLivraison ? livraison.dateLivraison|date('Y-m-d') : '' }}</td></tr>
+                <tr><th>Status</th><td>{{ livraison.statut ? 'Processed' : 'Pending' }}</td></tr>
+            </tbody>
+        </table>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ livraison.id }}</td>
-            </tr>
-            <tr>
-                <th>Adresse</th>
-                <td>{{ livraison.adresse }}</td>
-            </tr>
-            <tr>
-                <th>Date_livraison</th>
-                <td>{{ livraison.dateLivraison ? livraison.dateLivraison|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Statut</th>
-                <td>{{ livraison.statut ? 'Yes' : 'No' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_livraison_index') }}">back to list</a>
-
-    <a href="{{ path('app_livraison_edit', {'id': livraison.id}) }}">edit</a>
-
-    {{ include('livraison/_delete_form.html.twig') }}
+        {% if (is_granted('ROLE_AGRICULTEUR') or is_granted('ROLE_CLIENT')) and livraison.commande.client == app.user %}
+            {% if not livraison.statut %}
+                <div class="action-buttons">
+                    <a href="{{ path('app_livraison_edit', {'id': livraison.id}) }}" 
+                       class="btn btn-primary">Modify Delivery</a>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
 {% endblock %}

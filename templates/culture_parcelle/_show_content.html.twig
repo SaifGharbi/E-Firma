@@ -1,0 +1,74 @@
+<div class="hero-wrap hero-bread" style="background-image: url('{{ asset('FrontOffice/images/bg_1.jpg') }}');">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs">
+                    <span class="mr-2"><a href="{{ path('app_home') }}">Accueil</a></span> 
+                    <span>Culture Parcelle</span>
+                </p>
+                <h1 class="mb-0 bread">Détails de la Culture Parcelle: {{ culture_parcelle.typeCulture }}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section ftco-degree-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 ftco-animate">
+                    <div class="culture-details">
+                        <h2 class="mb-3">{{ culture_parcelle.typeCulture|e }} - Détails</h2>
+                        <div class="details-wrapper">
+                            <div class="detail-item">
+                                <strong>Type de culture:</strong> <span>{{ culture_parcelle.typeCulture|e }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Date de Plantation:</strong> 
+                                <span>
+                                    {% if culture_parcelle.datePlantation %}
+                                        <i class=""oi oi-calendar-day"</i> {{ culture_parcelle.datePlantation|date('d/m/Y') }}
+                                    {% else %}
+                                        <i class=""oi oi-calendar-check"></i> Non définie
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Date de Récolte:</strong> 
+                                <span>
+                                    {% if culture_parcelle.dateRecolte %}
+                                        <i class=""oi oi-calendar"></i> {{ culture_parcelle.dateRecolte|date('d/m/Y') }}
+                                    {% else %}
+                                        <i class=""oi oi-calendar"></i> Non définie
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Rendement Estimé:</strong> 
+                                <span>{{ culture_parcelle.rendementEstime|number_format(2, '.', ' ') }} kg</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 d-flex justify-content-between">
+                            <a href="{{ path('app_culture_parcelle_index') }}" class="btn btn-outline-secondary">
+                                <i class="icon-arrow-left"></i> Retour à la liste
+                            </a>
+
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item text-info" href="{{ path('app_culture_parcelle_edit', {'id': culture_parcelle.id}) }}">
+                                        <i class="icon-pencil"></i> Modifier
+                                    </a>
+                                    <a class="dropdown-item text-danger" href="{{ path('app_culture_parcelle_delete', {'id': culture_parcelle.id}) }}">
+                                        <i class="icon-trash"></i> Supprimer
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>

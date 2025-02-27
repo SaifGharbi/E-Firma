@@ -1,42 +1,7 @@
-{# FrontOffice/product_list.twig #}
-
 {% extends 'base.html.twig' %}
 
+{% block title %}Our Products{% endblock %}
+
 {% block body %}
-    <section class="ftco-section">
-        <div class="container">
-            <div class="row justify-content-center mb-3 pb-3">
-                <div class="col-md-12 heading-section text-center ftco-animate">
-                    <h2 class="mb-4">Our Products</h2>
-                    <p>Browse our wide selection of fresh and organic products</p>
-                </div>
-            </div>
-            <div class="row">
-                {% for produit in produits %}
-                    <div class="col-md-6 col-lg-3 ftco-animate">
-                        <div class="product-card">
-                            <a href="{{ path('app_produit_show', {'id': produit.id}) }}" class="img-prod">
-                                <img class="img-fluid" src="{{ asset('FrontOffice/images/product-2.jpg') }}" alt="{{ produit.nom }}">
-                                <div class="overlay"></div>
-                            </a>
-                            <div class="text py-3 pb-4 px-3 text-center">
-                                <h3><a href="{{ path('app_produit_show', {'id': produit.id}) }}">{{ produit.nom }}</a></h3>
-                                <p class="description">{{ produit.description }}</p>
-                                <div class="d-flex justify-content-center">
-                                    <div class="pricing">
-                                        <p class="price"><span>{{ produit.prix }} TND</span></p>
-                                    </div>
-                                </div>
-                                <div class="bottom-area d-flex justify-content-center px-3">
-                                    <a href="{{ path('app_produit_show', {'id': produit.id}) }}" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-                                        <span><i class="ion-ios-cart"></i></span> Add to Cart
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
+    {{ include('produit/_content.html.twig') }}
 {% endblock %}

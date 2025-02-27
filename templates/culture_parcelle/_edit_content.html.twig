@@ -1,0 +1,31 @@
+{% block body %}
+    <section class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Page Title -->
+                <h1 class="text-center mb-4 text-primary">Modifier la Culture Parcelle</h1>
+
+                <!-- Card Container -->
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <!-- Form Include with Styling -->
+                        <div class="mb-4">
+                            {{ include('culture_parcelle/_form.html.twig', {'button_label': 'Mettre à Jour'}) }}
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <!-- Back to List Button -->
+                            <a href="{{ path('app_culture_parcelle_index') }}" class="btn btn-outline-secondary">
+                                <i class="icon-arrow-left"></i> Retour à la liste
+                            </a>
+
+                            <!-- Delete Form -->
+                            {{ include('culture_parcelle/_delete_form.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

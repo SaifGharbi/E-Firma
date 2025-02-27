@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Admin Panel{% endblock %}</title>
+
+    <!-- Meta Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="ColorlibHQ" />
+    <meta name="description" content="AdminLTE - Free Bootstrap 5 Admin Dashboard" />
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous"/>
+
+    <!-- OverlayScrollbars -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/styles/overlayscrollbars.min.css" crossorigin="anonymous"/>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" crossorigin="anonymous"/>
+
+    <!-- AdminLTE CSS -->
+    <link rel="stylesheet" href="{{ asset('backoffice/css/adminlte.css') }}" />
+
+    {% block styles %}{% endblock %}
+</head>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+
+<!-- Wrapper -->
+<div class="app-wrapper">
+
+    <!-- Header -->
+    <nav class="app-header navbar navbar-expand bg-body">
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                        <i class="bi bi-list"></i>
+                    </a>
+                </li>
+                <li class="nav-item d-none d-md-block"><a href="{{ path('admin_dashboard') }}" class="nav-link">Home</a></li>
+                <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Contact</a></li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item d-none d-md-block"><a href="{{ app.request.uri ~ '/new' }}" class="nav-link">New</a></li>
+                {% endif %}
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown user-menu">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <img src="{{ asset('backoffice/assets/img/user2-160x160.jpg') }}" class="user-image rounded-circle shadow" alt="User Image"/>
+                        <span class="d-none d-md-inline">Admin Name</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                        <li class="user-header text-bg-primary">
+                            <img src="{{ asset('backoffice/assets/img/user2-160x160.jpg') }}" class="rounded-circle shadow" alt="User Image"/>
+                            <p>Admin Name - Administrator</p>
+                        </li>
+                        <li class="user-footer">
+                            <a href="#" class="btn btn-default btn-flat">Profile</a>
+                            <a href="{{ path('app_logout') }}" class="btn btn-default btn-flat float-end">Sign out</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <div class="sidebar-brand">
+            <a href="{{ path('admin_dashboard') }}" class="brand-link">
+                <img src="{{ asset('backoffice/assets/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image opacity-75 shadow"/>
+                <span class="brand-text fw-light">E-Firma Admin</span>
+            </a>
+        </div>
+
+        <div class="sidebar-wrapper">
+            <nav class="mt-2">
+                <ul class="nav sidebar-menu flex-column">
+                    <li class="nav-item">
+                        <a href="{{ path('admin_dashboard') }}" class="nav-link">
+                            <i class="nav-icon bi bi-speedometer"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('admin_users') }}" class="nav-link">
+                            <i class="nav-icon bi bi-people-fill"></i>
+                            <p>Users</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('admin_parcelles') }}" class="nav-link">
+                            <i class="nav-icon bi bi-tree-fill"></i>
+                            <p>Parcelles</p>
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a href="{{ path('app_produit_index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-tree-fill"></i>
+                            <p>Produits</p>
+                        </a>
+                    </li>
+                    
+                     <li class="nav-item">
+                        <a href="{{ path('app_rendez_vous_index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-tree-fill"></i>
+                            <p>Rendez-vous</p>
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a href="{{ path('app_culture_parcelle_index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-tree-fill"></i>
+                            <p>Culture Parcelle</p>
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a href="{{ path('app_commande_index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-tree-fill"></i>
+                            <p>Commandes</p>
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a href="{{ path('app_parcelle_index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-tree-fill"></i>
+                            <p>Parcelles</p>
+                        </a>
+                    </li>
+                       <li class="nav-item">
+                        <a href="{{ path('app_produit_categorie_index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-tree-fill"></i>
+                            <p>Produits Categories</p>
+                        </a>
+                    </li>
+                       <li class="nav-item">
+                        <a href="{{ path('app_livraison_index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-tree-fill"></i>
+                            <p>livraisons</p>
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a href="{{ path('app_service_index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-tree-fill"></i>
+                            <p>Services</p>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="app-main">
+        <div class="app-content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6"><h3 class="mb-0">{% block page_title %}Dashboard{% endblock %}</h3></div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-end">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">{% block breadcrumb %}Dashboard{% endblock %}</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="app-content">
+            <div class="container-fluid">
+                {% block body %}{% endblock %}
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="float-end d-none d-sm-inline">E-Firma Admin Panel</div>
+        <strong>Copyright &copy; 2024 <a href="#">E-Firma</a>.</strong> All rights reserved.
+    </footer>
+</div>
+
+<!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+<script src="{{ asset('backoffice/js/adminlte.js') }}"></script>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

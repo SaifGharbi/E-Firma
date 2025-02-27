@@ -1,13 +1,16 @@
-{% extends 'base.html.twig' %}
+{% extends is_granted('ROLE_ADMIN') ? 'base_admin.html.twig' : 'base.html.twig' %}
 
 {% block title %}Edit Service{% endblock %}
 
 {% block body %}
-    <h1>Edit Service</h1>
-
-    {{ include('service/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_service_index') }}">back to list</a>
-
-    {{ include('service/_delete_form.html.twig') }}
+    {% if (is_granted('ROLE_VETERINAIRE') or is_granted('ROLE_EXPERT') or is_granted('ROLE_AGRICULTEUR')) %}
+        <div class="container">
+            <h1>Edit Service</h1>
+            {{ include('service/_form.html.twig', {'button_label': 'Update'}) }}
+            <a href="{{ path('app_service_index') }}" class="btn btn-secondary">Back to list</a>
+            {{ include('service/_delete_form.html.twig') }}
+        </div>
+    {% else %}
+        <div class="alert alert-danger">Access Denied</div>
+    {% endif %}
 {% endblock %}

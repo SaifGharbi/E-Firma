@@ -1,6 +1,6 @@
-{% extends 'base.html.twig' %}
+{% extends is_granted('ROLE_ADMIN') ? 'base_admin.html.twig' : 'base.html.twig' %}
 
-{% block title %}Détails de la Culture Parcelle{% endblock %}
+{% block title %}Culture Details{% endblock %}
 
 {% block body %}
     <div class="hero-wrap hero-bread" style="background-image: url('{{ asset('FrontOffice/images/bg_1.jpg') }}');">

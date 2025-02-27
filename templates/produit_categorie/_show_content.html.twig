@@ -1,0 +1,24 @@
+<div class="container">
+    <h1>ProduitCategorie</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ produit_categorie.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ produit_categorie.nom }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ produit_categorie.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_produit_categorie_index') }}">back to list</a>
+    <a href="{{ path('app_produit_categorie_edit', {'id': produit_categorie.id}) }}">edit</a>
+    {{ include('produit_categorie/_delete_form.html.twig') }}
+</div> 

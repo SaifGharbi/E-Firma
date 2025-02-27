@@ -17,8 +17,15 @@ final class ProduitController extends AbstractController
     #[Route(name: 'app_produit_index', methods: ['GET'])]
     public function index(ProduitRepository $produitRepository): Response
     {
-        return $this->render('produit/index.html.twig', [
-            'produits' => $produitRepository->findAll(),
+        $produits = $produitRepository->findAll();
+        
+        // Choose template based on user role
+        $template = $this->isGranted('ROLE_ADMIN') 
+            ? 'produit/index_admin.html.twig'
+            : 'produit/index.html.twig';
+        
+        return $this->render($template, [
+            'produits' => $produits,
         ]);
     }
 

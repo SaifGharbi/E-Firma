@@ -1,91 +1,11 @@
-{% extends 'base.html.twig' %}
+{% extends is_granted('ROLE_ADMIN') ? 'base_admin.html.twig' : 'base.html.twig' %}
 
 {% block title %}Détails de la Parcelle{% endblock %}
 
 {% block body %}
-    <div class="hero-wrap hero-bread" style="background-image: url('{{ asset('FrontOffice/images/bg_1.jpg') }}');">
-        <div class="container">
-            <div class="row no-gutters slider-text align-items-center justify-content-center">
-                <div class="col-md-9 ftco-animate text-center">
-                    <p class="breadcrumbs">
-                        <span class="mr-2"><a href="{{ path('app_home') }}">Accueil</a></span> 
-                        <span>Parcelle</span>
-                    </p>
-                    <h1 class="mb-0 bread">Détails de la Parcelle</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <section class="ftco-section ftco-degree-bg">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 ftco-animate">
-                    <div class="parcelle-details">
-                        <h2 class="mb-3">{{ parcelle.nom|e }} - Détails</h2>
-                        <div class="details-wrapper">
-                            <div class="detail-item">
-                                <strong>Nom:</strong> <span>{{ parcelle.nom|e }}</span>
-                            </div>
-                            <div class="detail-item">
-                                <strong>Superficie:</strong> <span>{{ parcelle.superficie|number_format(2, '.', ' ') }} m²</span>
-                            </div>
-                            <div class="detail-item">
-                                <strong>Localisation:</strong> <span>{{ parcelle.localisation|e }}</span>
-                                <a href="https://www.google.com/maps/search/?q={{ parcelle.localisation|url_encode }}"
-                                    class="btn btn-sm btn-success" target="_blank" title="Voir sur la carte">
-                                    <i class="icon-map"></i>
-                                </a>
-                            </div>
-                        </div>
-                        
-                                <a href="{{ path('app_nasa_data') }}" class="btn btn-outline-secondary">
-                                    <i class="icon-map"></i> Nasa Satellite Image
-                                </a>
-
-                        <h3 class="mt-5 mb-3">Informations sur les Cultures</h3>
-                        {% if parcelle.cultureParcelles is not empty %}
-                            <div class="culture-list">
-                                {% for culture in parcelle.cultureParcelles %}
-                                    <div class="culture-item card p-3 mb-3">
-                                        <h4>{{ culture.typeCulture|e }}</h4>
-                                        <p><strong>Date de Plantation:</strong> {{ culture.datePlantation ? culture.datePlantation|date('d/m/Y') : 'Non définie' }}</p>
-                                        <p><strong>Date de Récolte:</strong> {{ culture.dateRecolte ? culture.dateRecolte|date('d/m/Y') : 'Non définie' }}</p>
-                                        <p><strong>Rendement Estimé:</strong> {{ culture.rendementEstime|number_format(2, '.', ' ') }} kg</p>
-                                        <div class="actions">
-                                            <a href="{{ path('app_culture_parcelle_show', {'id': culture.id}) }}" class="btn btn-sm btn-info">Voir</a>
-                                            <a href="{{ path('app_culture_parcelle_edit', {'id': culture.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            <p class="text-muted">Aucune culture associée à cette parcelle.</p>
-                        {% endif %}
-
-                        <div class="mt-4 d-flex justify-content-between">
-    <a href="{{ path('app_parcelle_index') }}" class="btn btn-outline-secondary">
-        <i class="icon-arrow-left"></i> Retour à la liste
-    </a>
-
-    <div class="btn-group">
-        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Actions
-        </button>
-        <div class="dropdown-menu">
-            <a class="dropdown-item text-info" href="{{ path('app_parcelle_edit', {'id': parcelle.id}) }}">
-                <i class="icon-pencil"></i> Modifier
-            </a>
-            <a class="dropdown-item text-danger" href="{{ path('app_parcelle_delete', {'id': parcelle.id}) }}">
-                <i class="icon-trash"></i> Supprimer
-            </a>
-        </div>
-    </div>
-</div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_AGRICULTEUR') %}
+        {{ include('parcelle/_show_content.html.twig') }}
+    {% else %}
+        <div class="alert alert-danger">Access Denied</div>
+    {% endif %}
 {% endblock %}
