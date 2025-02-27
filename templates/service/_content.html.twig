@@ -21,8 +21,9 @@
                 <td>{{ service.prix }}</td>
                 <td>{{ service.type }}</td>
                 <td>
-                    {% if not is_granted('ROLE_CLIENT') %}
+                    
                         <a href="{{ path('app_service_show', {'id': service.id}) }}">show</a>
+                    {% if is_granted('ROLE_VETERINAIRE') or is_granted('ROLE_EXPERT') or is_granted('ROLE_ADMIN') %}
                         <a href="{{ path('app_service_edit', {'id': service.id}) }}">edit</a>
                     {% endif %}
                 </td>
@@ -35,7 +36,7 @@
         </tbody>
     </table>
 
-    {% if not is_granted('ROLE_CLIENT') %}
+    {% if is_granted('ROLE_VETERINAIRE') or is_granted('ROLE_EXPERT') or is_granted('ROLE_ADMIN') %}
         <a href="{{ path('app_service_new') }}">Create new</a>
     {% endif %}
 </div> 

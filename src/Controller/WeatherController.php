@@ -31,7 +31,7 @@ class WeatherController extends AbstractController
         }
 
         try {
-            $weather = $this->weatherService->getCurrentWeather((float)$lat, (float)$lon);
+            $weather = $this->weatherService->getWeatherByLocation((float)$lat, (float)$lon);
             return new JsonResponse($weather);
         } catch (\Exception $e) {
             return new JsonResponse([

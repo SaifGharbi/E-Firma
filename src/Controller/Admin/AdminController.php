@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\UserRepository;
 use App\Repository\ParcelleRepository;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 #[Route('/admin')]
 class AdminController extends AbstractController

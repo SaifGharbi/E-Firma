@@ -49,10 +49,12 @@
                                     <p><strong>Date de Plantation:</strong> {{ culture.datePlantation ? culture.datePlantation|date('d/m/Y') : 'Non définie' }}</p>
                                     <p><strong>Date de Récolte:</strong> {{ culture.dateRecolte ? culture.dateRecolte|date('d/m/Y') : 'Non définie' }}</p>
                                     <p><strong>Rendement Estimé:</strong> {{ culture.rendementEstime|number_format(2, '.', ' ') }} kg</p>
+                                    {% if is_granted('ROLE_VETERINAIRE') or is_granted('ROLE_EXPERT') or is_granted('ROLE_ADMIN') %}
                                     <div class="d-flex justify-content-between">
                                         <a href="{{ path('app_culture_parcelle_show', {'id': culture.id}) }}" class="btn btn-info btn-sm">Voir</a>
                                         <a href="{{ path('app_culture_parcelle_edit', {'id': culture.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
                                     </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -91,6 +93,7 @@
                 <p class="text-muted">Aucune donnée météo disponible.</p>
             {% endif %}
         </div>
+        
     </div>
 
                         <div class="mt-4 d-flex justify-content-between">

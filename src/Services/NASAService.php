@@ -16,8 +16,8 @@ class NASAService
 
     public function getSatelliteData(): array
 {
-    $latitude = 34.0;
-    $longitude = 9.5;
+    $latitude = 36.5011;
+    $longitude = 8.7802;
 
     try {
         $response = $this->client->request('GET', 'https://api.nasa.gov/planetary/earth/assets', [
@@ -27,7 +27,7 @@ class NASAService
                 'dim' => 0.5,
                 'api_key' => $this->apiKey,
                 'cloud_score' => true,
-                'date' => '2025-02-1', // Use today's date dynamically
+                'date' => date('Y-m-d'), // Corrected date format
             ]
         ]);
 
@@ -45,19 +45,21 @@ class NASAService
         }
 
         return [
-            'date' => isset($data['date']) ?? 'Unknown',
+            'date' => $data['date'] ?? 'Unknown',
             'image_url' => $data['url'],
-            'cloud_coverage' => isset($data['cloud_score']) ? $data['cloud_score'] : 'N/A',
+            'cloud_coverage' => $data['cloud_score'] ?? 'No data available',
             'dataset' => $data['resource']['dataset'] ?? 'N/A',
             'location' => [
                 'latitude' => $latitude,
                 'longitude' => $longitude,
+                'name' => 'Jendouba, Tunisia' // Added name for clarity
             ]
         ];
     } catch (\Exception $e) {
         return ['error' => 'NASA API error: ' . $e->getMessage()];
     }
 }
+
 
 
 }

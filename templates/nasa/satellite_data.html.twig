@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="container mt-5">
-        <h1 class="text-center mb-4">NASA Satellite Image and Data for Tunisia</h1>
+        <h1 class="text-center mb-4">Image De Satellite NASA A Jendouba</h1>
 
         <div class="row justify-content-center">
             {% if nasa_data.image_url %}
@@ -13,7 +13,7 @@
                         <div class="card-body">
                             <h4 class="card-title text-center">Satellite Image</h4>
                             <div class="text-center">
-                                <img src="{{ nasa_data.image_url }}" alt="Satellite Image of Tunisia" class="img-fluid rounded shadow-sm">
+                                <img src="{{ nasa_data.image_url }}" alt="Satellite Image of Jendouba" class="img-fluid rounded shadow-sm" loading="lazy">
                             </div>
                         </div>
                     </div>
@@ -36,13 +36,13 @@
                                     <strong>Date:</strong> {{ nasa_data.date | date("F j, Y, g:i a") }}
                                 </li>
                                 <li class="list-group-item">
-                                    <strong>Cloud Coverage:</strong> 
-                                    {% if nasa_data.cloud_coverage == 'N/A' %}
-                                        No data available
-                                    {% else %}
-                                        {{ nasa_data.cloud_coverage }}%
-                                    {% endif %}
-                                </li>
+    <strong>Cloud Coverage:</strong> 
+    {% if nasa_data.cloud_coverage is not empty and nasa_data.cloud_coverage != 'N/A' %}
+        {{ nasa_data.cloud_coverage }}%
+    {% else %}
+        No data available
+    {% endif %}
+</li>
                                 <li class="list-group-item">
                                     <strong>Dataset:</strong> 
                                     <a href="https://earthdata.nasa.gov/search/collections?keywords={{ nasa_data.dataset }}" target="_blank">{{ nasa_data.dataset }}</a>
