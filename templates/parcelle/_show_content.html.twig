@@ -49,7 +49,7 @@
                                     <p><strong>Date de Plantation:</strong> {{ culture.datePlantation ? culture.datePlantation|date('d/m/Y') : 'Non définie' }}</p>
                                     <p><strong>Date de Récolte:</strong> {{ culture.dateRecolte ? culture.dateRecolte|date('d/m/Y') : 'Non définie' }}</p>
                                     <p><strong>Rendement Estimé:</strong> {{ culture.rendementEstime|number_format(2, '.', ' ') }} kg</p>
-                                    {% if is_granted('ROLE_VETERINAIRE') or is_granted('ROLE_EXPERT') or is_granted('ROLE_ADMIN') %}
+                                    {% if is_granted('ROLE_AGRICULTEUR') or is_granted('ROLE_ADMIN') %}
                                     <div class="d-flex justify-content-between">
                                         <a href="{{ path('app_culture_parcelle_show', {'id': culture.id}) }}" class="btn btn-info btn-sm">Voir</a>
                                         <a href="{{ path('app_culture_parcelle_edit', {'id': culture.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
@@ -63,6 +63,34 @@
             {% else %}
                 <p class="text-muted">Aucune culture associée à cette parcelle.</p>
             {% endif %}
+
+            <!-- 🌱 Display Crop Recommendation -->
+{% if recommendedCrop %}
+    <div class="card bg-light shadow-sm mb-4">
+        <div class="card-body text-center">
+            <h3 class="card-title text-success">
+                🌱 Recommandation de culture: 
+                <span class="text-primary">{{ recommendedCrop | capitalize }}</span>
+            </h3>
+        </div>
+    </div>
+{% endif %}
+
+<div class="alert alert-info">
+    Température utilisée : {{ weather.main.temp ?? 25 }} °C<br>
+    Humidité utilisée : {{ weather.main.humidity ?? 80 }} %
+</div>
+
+{% if satelliteImageBase64 %}
+    <div class="text-center mt-4">
+        <h3>🛰 Satellite Image (Sentinel-2)</h3>
+        <img src="data:image/png;base64,{{ satelliteImageBase64 }}" alt="Satellite View" class="img-fluid rounded shadow">
+    </div>
+{% else %}
+    <div class="alert alert-danger text-center">
+        ❌ No satellite image available for this parcelle.
+    </div>
+{% endif %}
         </div>
 
         <!-- Right Column: Weather Information -->

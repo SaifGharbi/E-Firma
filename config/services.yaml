@@ -6,6 +6,8 @@
 parameters:
     nasa_api_key: 'WtVu3xMPl4iGOks3POHr96tpMdItcNxqeXviEfhd'
     openweather.api_key: 'a729d36d5045c2f0825b622482b67d31'
+    sentinelhub.client_id: 'a02c4386-5332-4eec-9779-5e8c38c8a354'
+    sentinelhub.client_secret: 'lbYnlZ9iaVSKPGpKIPaAs3ijLCV78yHP'
 
 services:
     # default configuration for services in *this* file
@@ -35,4 +37,15 @@ services:
         arguments:
             $httpClient: '@http_client'
             $apiKey: '%openweather.api_key%'
+    
+    App\Service\CropRecommendationService:
+        arguments:
+            $apiUrl: 'http://127.0.0.1:5000/predict_crop' # Flask API URL
+    
+
+    App\Service\SentinelHubService:
+        arguments:
+            $client: '@http_client'
+            $clientId: '%sentinelhub.client_id%'
+            $clientSecret: '%sentinelhub.client_secret%'
     

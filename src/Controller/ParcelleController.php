@@ -11,16 +11,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\WeatherService;
+use App\Service\CropRecommendationService;
+use App\Service\SentinelHubService;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[Route('/parcelle')]
 final class ParcelleController extends AbstractController
 {
-    private $weatherService;
+    private WeatherService $weatherService;
+    private CropRecommendationService $cropService;
 
-    public function __construct(WeatherService $weatherService)
-    {
+    public function __construct(
+        WeatherService $weatherService,
+        CropRecommendationService $cropService
+    ) {
         $this->weatherService = $weatherService;
+        $this->cropService = $cropService;
     }
 
     #[Route(name: 'app_parcelle_index', methods: ['GET'])]
@@ -72,7 +78,7 @@ final class ParcelleController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_parcelle_show', methods: ['GET'])]
-    public function show(Parcelle $parcelle,HttpClientInterface $httpClient): Response
+    public function show(Parcelle $parcelle,HttpClientInterface $httpClient,SentinelHubService $sentinelHubService): Response
     {
         $cultureParcelles = $parcelle->getCultureParcelles();
 
@@ -82,11 +88,30 @@ final class ParcelleController extends AbstractController
         // Get weather based on the parcelle's location
         $weather = $this->weatherService->getWeatherByLocation($parcelleLocation);
 
+        try {
+            $recommendedCrop = $this->cropService->getRecommendedCrop(
+                $weather['main']['temp'] ?? 25,
+                $weather['main']['humidity'] ?? 80,
+                6.5,
+                200
+            );
+            $satelliteImage = $sentinelHubService->getSatelliteImage($parcelleLocation);
+            $satelliteImageBase64 = base64_encode($satelliteImage);
+    
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Unable to fetch external data.');
+            $recommendedCrop = null;
+            $satelliteImageBase64 = null;
+        }
+    
+
         return $this->render('parcelle/show.html.twig', [
             'parcelle' => $parcelle,
             'cultureParcelles' => $cultureParcelles,
             'weather' => $weather,
             'parcelleLocation' => $parcelleLocation,
+            'recommendedCrop' => $recommendedCrop,
+            'satelliteImageBase64' => $satelliteImageBase64,
         ]);
     }
 
@@ -118,4 +143,6 @@ final class ParcelleController extends AbstractController
 
         return $this->redirectToRoute('app_parcelle_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
 }
