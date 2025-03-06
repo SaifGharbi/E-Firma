@@ -1,32 +1,76 @@
-{% extends is_granted('ROLE_ADMIN') ? 'base_admin.html.twig' : 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Commande Details{% endblock %}
+{% block title %}Order Details - #{{ commande.id }}{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Order Details</h1>
-        <table class="table">
-            <tbody>
-                <tr><th>Date</th><td>{{ commande.date ? commande.date|date('Y-m-d H:i:s') : '' }}</td></tr>
-                <tr><th>Total</th><td>{{ commande.total }}</td></tr>
-                <tr><th>Status</th><td>{{ commande.statut ? 'Processed' : 'Pending' }}</td></tr>
-            </tbody>
-        </table>
+    <section class="ftco-section">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10">
+                    <div class="card shadow-lg border-0 rounded-4 mb-4">
+                        <div class="card-header bg-success text-white text-center py-3">
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="card-text"><strong>Date:</strong> {{ commande.date ? commande.date|date('Y-m-d H:i:s') : 'Not specified' }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="card-text"><strong>Total:</strong> {{ commande.total }} TND</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="card-text"><strong>Status:</strong> {{ commande.statut }}</p>
+                                </div>
+                            </div>
 
-        {% if (is_granted('ROLE_AGRICULTEUR') or is_granted('ROLE_CLIENT')) and commande.client == app.user %}
-            <div class="action-buttons">
-                {% if commande.statut == 'pending' %}
-                    <a href="{{ path('app_commande_edit', {'id': commande.id}) }}" 
-                       class="btn btn-primary">Modify Order</a>
-                    <a href="{{ path('app_commande_cancel', {'id': commande.id}) }}" 
-                       class="btn btn-danger">Cancel Order</a>
-                {% endif %}
-                
-                {% if commande.statut == 'confirmed' %}
-                    <a href="{{ path('app_livraison_new', {'commande': commande.id}) }}" 
-                       class="btn btn-success">Request Delivery</a>
-                {% endif %}
+
+                            <!-- Actions -->
+                            <div class="mt-4 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <a href="{{ path('app_my_orders') }}" class="btn btn-secondary btn-lg">
+                                        <i class="fas fa-arrow-left me-2"></i> Back to List
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="{{ path('app_commande_edit', {'id': commande.id}) }}" class="btn btn-primary btn-lg me-2">
+                                        <i class="fas fa-edit me-2"></i> Edit
+                                    </a>
+                                    {{ include('commande/_delete_form.html.twig') }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        {% endif %}
-    </div>
+        </div>
+    </section>
+
+    <style>
+        .card {
+            background: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .btn-lg {
+            font-size: 1rem;
+            padding: 0.5rem 1.5rem;
+        }
+
+        .card-text {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .table-responsive {
+            margin-bottom: 1rem;
+        }
+    </style>
 {% endblock %}

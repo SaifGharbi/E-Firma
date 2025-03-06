@@ -1,0 +1,147 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Top Statistics{% endblock %}
+
+{% block body %}
+    <h1 class="text-center text-primary mb-4">Top Statistics</h1>
+
+    <div class="container mt-3">
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <!-- Card for Top Customers by Order Value -->
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Top Customers by Order Value</h5>
+                        <canvas id="topCustomersChart" class="mb-3" style="max-height: 300px;"></canvas>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Name</th>
+                                    <th>Total Spent</th>
+                                    <th>Total Orders</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for customer in topCustomers %}
+                                    <tr>
+                                        <td>{{ customer.user_id }}</td>
+                                        <td>{{ customer.user_name }}</td>
+                                        <td>{{ customer.total_spent }} TND</td>
+                                        <td>{{ customer.total_orders }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card for Most Popular Delivery Locations -->
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Most Popular Delivery Locations</h5>
+                        <canvas id="deliveryLocationsChart" class="mb-3" style="max-height: 300px;"></canvas>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                <tr>
+                                    <th>Delivery Address</th>
+                                    <th>Number of Deliveries</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for location in popularLocations %}
+                                    <tr>
+                                        <td>{{ location.delivery_address }}</td>
+                                        <td>{{ location.delivery_count }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Data for Top Customers by Order Value (Bar Chart)
+            let topCustomersCtx = document.getElementById('topCustomersChart').getContext('2d');
+            new Chart(topCustomersCtx, {
+                type: 'bar',
+                data: {
+                    labels: [{% for customer in topCustomers %}"{{ customer.user_name }}"{% if not loop.last %},{% endif %}{% endfor %}],
+                    datasets: [{
+                        label: 'Total Spent (TND)',
+                        data: [{% for customer in topCustomers %}{{ customer.total_spent }}{% if not loop.last %},{% endif %}{% endfor %}],
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false, // Allow custom height
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Total Spent (TND)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // Hide legend since we only have one dataset
+                        },
+                        title: {
+                            display: true,
+                            text: 'Top Customers by Order Value'
+                        }
+                    }
+                }
+            });
+
+            // Data for Most Popular Delivery Locations (Pie Chart)
+            let deliveryLocationsCtx = document.getElementById('deliveryLocationsChart').getContext('2d');
+            new Chart(deliveryLocationsCtx, {
+                type: 'pie',
+                data: {
+                    labels: [{% for location in popularLocations %}"{{ location.delivery_address }}"{% if not loop.last %},{% endif %}{% endfor %}],
+                    datasets: [{
+                        data: [{% for location in popularLocations %}{{ location.delivery_count }}{% if not loop.last %},{% endif %}{% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            // Add more colors if needed for additional locations
+                        ]
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false, // Allow custom height
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Most Popular Delivery Locations'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

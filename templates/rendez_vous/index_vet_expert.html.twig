@@ -1,0 +1,142 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vet Expert Appointments{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="text-center mb-4 text-primary fw-bold">📅 Vet Expert Appointments</h1>
+
+        <!-- Search Bar -->
+        <div class="d-flex justify-content-center mb-4">
+            <input type="text" id="searchInput" class="form-control search-input w-50" placeholder="🔍 Search by ID, Date, or Status">
+        </div>
+
+        {% if rendez_vouses is empty %}
+            <div class="alert alert-warning text-center p-4 rounded-4">
+                <i class="fas fa-calendar-times fa-3x mb-2 text-warning"></i>
+                <p class="mb-0">No appointments found. Schedule one today!</p>
+            </div>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table custom-table text-center">
+                    <thead>
+                    <tr>
+                        <th>📅 Date</th>
+                        <th>📢 Status</th>
+                        <th>⚙ Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="rendezVousTable">
+                    {% for rendez_vou in rendez_vouses %}
+                        <tr data-id="{{ rendez_vou.id }}">
+                            <td>{{ rendez_vou.date ? rendez_vou.date|date('Y-m-d H:i') : '' }}</td>
+                            <td>
+                                <button class="btn status-btn {{ rendez_vou.statut ? 'bg-success' : 'bg-warning' }}" 
+                                        data-status="{{ rendez_vou.statut ? 'Confirmed' : 'Pending' }}" 
+                                        data-id="{{ rendez_vou.id }}">
+                                    {{ rendez_vou.statut ? 'Confirmed' : 'Pending' }}
+                                </button>
+                            </td>
+                            <td>
+                                <a href="{{ path('app_rendez_vous_show', {'id': rendez_vou.id}) }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                                <a href="{{ path('app_rendez_vous_edit', {'id': rendez_vou.id}) }}" class="btn btn-outline-warning btn-sm">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center">No records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+        <!-- Manual Pagination -->
+        <div class="d-flex justify-content-center mt-4">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {% if currentPage > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('app_commande_index_vet_exp', {'page': currentPage - 1}) }}">« Prev</a>
+                        </li>
+                    {% endif %}
+
+                    {% for page in 1..totalPages %}
+                        <li class="page-item {% if page == currentPage %}active{% endif %}">
+                            <a class="page-link" href="{{ path('app_commande_index_vet_exp', {'page': page}) }}">{{ page }}</a>
+                        </li>
+                    {% endfor %}
+
+                    {% if currentPage < totalPages %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('app_commande_index_vet_exp', {'page': currentPage + 1}) }}">Next »</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Live Search JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const statusButtons = document.querySelectorAll('.status-btn');
+    
+    statusButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const id = button.getAttribute('data-id');
+            const currentStatus = button.getAttribute('data-status') === 'Confirmed'; // Convert to boolean
+
+            fetch(`/rendez/vous/update-status/${id}`, { // Ensure correct route
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: JSON.stringify({ status: !currentStatus }) // Send boolean value
+            })
+            .then(response => response.json())
+            .then(data => {
+                button.textContent = data.status;
+                button.className = `btn status-btn ${data.statusClass}`;
+                button.setAttribute('data-status', data.status);
+            })
+            .catch(error => {
+                console.error('Error updating status:', error);
+            });
+        });
+    });
+});
+
+    </script>
+
+    <!-- Custom CSS -->
+    <style>
+        .status-btn {
+            padding: 8px 16px;
+            font-size: 1rem;
+            border-radius: 12px;
+            color: white;
+            width: 100%;
+        }
+
+        .status-btn.bg-success {
+            background-color: #28a745;
+        }
+
+        .status-btn.bg-warning {
+            background-color: #ffc107;
+        }
+
+        .status-btn:hover {
+            opacity: 0.8;
+        }
+    </style>
+
+{% endblock %}

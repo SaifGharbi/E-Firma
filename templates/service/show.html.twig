@@ -1,7 +1,78 @@
-{% extends is_granted('ROLE_ADMIN') ? 'base_admin.html.twig' : 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Service{% endblock %}
+{% block title %}Service Details{% endblock %}
 
 {% block body %}
-    {{ include('service/_show_content.html.twig') }}
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">📌 Service Details</h1>
+
+        <div class="card shadow-lg border-0 rounded-4 mt-4">
+            <div class="card-body">
+                <h3 class="card-title text-center fw-bold">{{ service.nom }}</h3>
+
+                <table class="table table-hover mt-3">
+                    <tbody>
+
+                    <tr>
+                        <th class="bg-light">📄 Description</th>
+                        <td>{{ service.description }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">💰 Price</th>
+                        <td><strong class="text-success">{{ service.prix }} TND</strong></td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">🔹 Type</th>
+                        <td>{{ service.type }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <!-- Back to List -->
+                    <a href="{{ path('app_service_index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+
+                    <!-- Edit Button -->
+                    <a href="{{ path('app_service_edit', {'id': service.id}) }}" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+
+                    <!-- Delete Button -->
+                    {{ include('service/_delete_form.html.twig', { 'class': 'd-inline' }) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        .card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .table th {
+            width: 30%;
+            font-weight: bold;
+        }
+
+        .btn {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
 {% endblock %}

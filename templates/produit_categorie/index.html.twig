@@ -1,7 +1,97 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_admin.html.twig' %}
 
-{% block title %}Liste des Catégories{% endblock %}
+{% block title %}Nouvelle Catégorie{% endblock %}
 
 {% block body %}
-    {{ include('produit_categorie/_content.html.twig') }}
+    <div class="container mt-5">
+        <h1 class="text-center fw-bold text-uppercase mb-4">Produit Catégories</h1>
+
+        <!-- Search Bar -->
+        <div class="mb-4 text-center">
+            <input type="text" id="search-input" class="form-control w-50 mx-auto" placeholder="Rechercher une catégorie...">
+        </div>
+
+        <div class="row justify-content-center" id="category-list">
+            {% for produit_categorie in produit_categories %}
+                <div class="col-md-6 mb-4 category-item">
+                    <div class="card shadow-lg p-3 rounded-custom border-0">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-success fw-bold">{{ produit_categorie.nom }}</h5>
+                            <p class="card-text text-muted">{{ produit_categorie.description }}</p>
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="{{ path('app_produit_categorie_show', {'id': produit_categorie.id}) }}"
+                                   class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-eye"></i> Voir
+                                </a>
+                                <a href="{{ path('app_produit_categorie_edit', {'id': produit_categorie.id}) }}"
+                                   class="btn btn-success btn-sm">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12 text-center">
+                    <p class="text-muted">Aucune catégorie trouvée.</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ path('app_produit_categorie_new') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus"></i> Ajouter une catégorie
+            </a>
+        </div>
+    </div>
+
+    <!-- Live Search Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("search-input").addEventListener("keyup", function () {
+                let query = this.value.toLowerCase();
+                let categories = document.querySelectorAll(".category-item");
+
+                categories.forEach(category => {
+                    let categoryName = category.querySelector(".card-title").textContent.toLowerCase();
+                    if (categoryName.includes(query)) {
+                        category.style.display = "block";
+                    } else {
+                        category.style.display = "none";
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #FFC107;
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 15px;
+            background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn {
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
 {% endblock %}

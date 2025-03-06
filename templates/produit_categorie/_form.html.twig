@@ -1,4 +1,70 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow-lg p-4 rounded-custom border-0">
+            <div class="card-body">
+                <h4 class="card-title text-center fw-bold"></h4>
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                <div class="mb-3">
+                    {{ form_label(form.nom, 'Nom:', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+                    <div class="text-danger">{{ form_errors(form.nom) }}</div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.description, 'Description:', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                    <div class="text-danger">{{ form_errors(form.description) }}</div>
+                </div>
+
+                <div class="text-center">
+                    <button class="btn btn-success">{{ button_label|default('Save') }}</button>
+                </div>
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FontAwesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- Custom Styles -->
+<style>
+    :root {
+        --primary-color: #007bff;
+        --secondary-color: #ff9800;
+    }
+
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 15px;
+        background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn {
+        transition: 0.3s;
+        font-weight: bold;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .btn-info {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-warning {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+    }
+</style>

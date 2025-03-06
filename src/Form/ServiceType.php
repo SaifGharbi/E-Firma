@@ -3,11 +3,12 @@
 namespace App\Form;
 
 use App\Entity\Service;
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 class ServiceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -16,17 +17,7 @@ class ServiceType extends AbstractType
             ->add('nom')
             ->add('description')
             ->add('prix')
-            ->add('type', ChoiceType::class, [
-                'label' => 'Choisissez le type',
-                'choices' => [
-                    'Vétérinaire' => 'TYPE_VETERINAIRE',
-                    'Expert' => 'TYPE_EXPERT',
-                ],
-                'expanded' => false,
-                'multiple' => false,
-                'required' => true
-            ])
-            ->add('Enregistrer', SubmitType::class);
+            ->add('type')
         ;
     }
 

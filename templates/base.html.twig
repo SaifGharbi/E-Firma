@@ -10,7 +10,8 @@
     <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
 
-    {# CSS Files #}
+    {# CSS Block to be overridden in child templates #}
+    {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('FrontOffice/css/open-iconic-bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('FrontOffice/css/animate.css') }}">
     <link rel="stylesheet" href="{{ asset('FrontOffice/css/owl.carousel.min.css') }}">
@@ -24,7 +25,7 @@
     <link rel="stylesheet" href="{{ asset('FrontOffice/css/icomoon.css') }}">
     <link rel="stylesheet" href="{{ asset('FrontOffice/css/style.css') }}">
 
-    {% block stylesheets %}{% endblock %}
+    {% endblock %}
 </head>
 
 <body class="goto-here">
@@ -67,15 +68,16 @@
 
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active"><a href="{{ path('app_home') }}" class="nav-link">Accueil</a></li>
-            
+            <li class="nav-item active"><a href="{{ path('app_gemini') }}" class="nav-link">🤖</a></li>
+
             {# Products Menu #}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Produits</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown04">
                     <a class="dropdown-item" href="{{ path('app_produit_index') }}">Shop</a>
                     {% if is_granted('ROLE_AGRICULTEUR') %}
-                        <a class="dropdown-item" href="{{ path('app_produit_new') }}">Ajouter Produits</a>
-                        <a class="dropdown-item" href="{{ path('app_produit_categorie_index') }}">Gérer Categories</a>
+                        <a class="dropdown-item" href="{{ path('app_produit_new') }}">add products</a>
+                        <a class="dropdown-item" href="{{ path('app_produit_my_products') }}"> my products </a>
                     {% endif %}
                 </div>
             </li>
@@ -86,13 +88,13 @@
                 <div class="dropdown-menu" aria-labelledby="dropdown04">
                     <a class="dropdown-item" href="{{ path('app_service_index') }}">Liste des Services</a>
                     {% if is_granted('ROLE_CLIENT') or is_granted('ROLE_AGRICULTEUR') %}
-                        <a class="dropdown-item" href="{{ path('app_rendez_vous_index') }}">Mes Rendez-vous</a>
+                        <a class="dropdown-item" href="{{ path('app_rendez_vous_my') }}">Mes Rendez-vous</a>
                     {% endif %}
                     {% if is_granted('ROLE_VETERINAIRE') %}
-                        <a class="dropdown-item" href="{{ path('app_rendez_vous_index', {'type': 'TYPE_VETERINAIRE'}) }}">Gérer Services Vétérinaires</a>
+                        <a class="dropdown-item" href="{{ path('app_commande_index_vet_exp', {'type': 'TYPE_VETERINAIRE'}) }}">Gérer Services Vétérinaires</a>
                     {% endif %}
                     {% if is_granted('ROLE_EXPERT') %}
-                        <a class="dropdown-item" href="{{ path('app_rendez_vous_index', {'type': 'TYPE_EXPERT'}) }}">Gérer Services Experts</a>
+                        <a class="dropdown-item" href="{{ path('app_commande_index_vet_exp', {'type': 'TYPE_EXPERT'}) }}">Gérer Services Experts</a>
                     {% endif %}
                 </div>
             </li>
@@ -108,6 +110,16 @@
                     </div>
                 </li>
             {% endif %}
+            <!-- Replace this line in your navbar -->
+            <li class="nav-item">
+                <a href="{{ path('cart_view_page') }}" class="nav-link position-relative">
+                    <span class="icon-shopping_cart"></span>
+                    <span id="cart-count" class="badge badge-danger position-absolute"
+                          style="top: 0px; right: -10px; font-size: 12px;">
+            0
+        </span>
+                </a>
+            </li>
 
             {# User Menu #}
             {% if app.user %}
@@ -117,16 +129,16 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
                         {% if is_granted('ROLE_CLIENT') or is_granted('ROLE_AGRICULTEUR') %}
-                            <a class="dropdown-item" href="{{ path('app_commande_index') }}">Mes Commandes</a>
+                            <a class="dropdown-item" href="{{ path('app_my_orders') }}">Mes Commandes</a>
                         {% endif %}
                         <a class="dropdown-item" href="{{ path('app_logout') }}">Se Déconnecter</a>
                     </div>
                 </li>
-                
+
                 {% if is_granted('ROLE_CLIENT') or is_granted('ROLE_AGRICULTEUR') %}
                     <li class="nav-item">
                         <a href="{{ path('app_commande_index') }}" class="nav-link">
-                            <span class="icon-shopping_cart"></span> [0]
+                            <span class="droppdown-item"></span>.
                         </a>
                     </li>
                 {% endif %}
@@ -138,9 +150,14 @@
     </div>
 </nav>
 
+<br>
+<br>
+
 <main>
     {% block body %}{% endblock %}
 </main>
+<br>
+<br>
 
 <section class="ftco-section ftco-counter img" id="section-counter" style="background-image: url({{ asset('FrontOffice/images/bg_3.jpg') }});">
     <div class="container">

@@ -1,7 +1,13 @@
-{% extends is_granted('ROLE_ADMIN') ? 'base_admin.html.twig' : 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Edit RendezVous{% endblock %}
 
 {% block body %}
-    {{ include('rendez_vous/_edit_content.html.twig') }}
+    <h1>Edit RendezVous</h1>
+
+    {{ include('rendez_vous/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_rendez_vous_my') }}">back to list</a>
+
+    {{ include('rendez_vous/_delete_form.html.twig') }}
 {% endblock %}

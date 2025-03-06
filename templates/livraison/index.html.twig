@@ -1,7 +1,190 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_admin.html.twig' %}
 
-{% block title %}Livraison index{% endblock %}
+{% block title %}Livraison Index{% endblock %}
 
 {% block body %}
-    {{ include('livraison/_content.html.twig') }}
+    <section class="ftco-section">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-12 col-md-12">
+                    <h1 class="mb-4 text-center text-success fw-bold">Livraison Management</h1>
+
+                    <!-- Search Input Field -->
+                    <div class="mb-3">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search for deliveries..." autocomplete="off">
+                    </div>
+
+                    {% if livraisons is empty %}
+                        <div class="alert alert-warning text-center p-4 rounded-4">
+                            <i class="fas fa-box-open fa-3x mb-2 text-warning"></i>
+                            <p class="mb-0">No delivery records found. Add a new delivery to get started!</p>
+                        </div>
+                    {% else %}
+                        <div class="card shadow-lg border-0 rounded-4">
+                            <div class="card-body p-4">
+                                <table class="table table-hover table-striped table-bordered text-center align-middle">
+                                    <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Address</th>
+                                        <th>Delivery Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="livraisonTableBody">
+                                    {% for livraison in livraisons %}
+                                        <tr class="livraison-row"
+                                            data-search="{{ livraison.id }} {{ livraison.adresse }} {{ livraison.dateLivraison ? livraison.dateLivraison|date('Y-m-d') : 'Not Set' }} {{ livraison.statut ? 'Yes' : 'No' }}">
+                                            <td>{{ livraison.id }}</td>
+                                            <td>{{ livraison.adresse }}</td>
+                                            <td>{{ livraison.dateLivraison ? livraison.dateLivraison|date('Y-m-d') : 'Not Set' }}</td>
+                                            <td>
+                                                {% if livraison.statut %}
+                                                    <span class="badge bg-custom-delivered">Yes</span>
+                                                {% else %}
+                                                    <span class="badge bg-custom-not-delivered">No</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <div class="d-flex justify-content-center gap-2">
+                                                    <a href="{{ path('app_livraison_show', {'id': livraison.id}) }}" class="btn btn-custom-view btn-sm">
+                                                        <i class="fas fa-eye"></i> Show
+                                                    </a>
+                                                    <a href="{{ path('app_livraison_pdf', {'id': livraison.id}) }}" class="btn btn-danger btn-sm">
+                                                        <i class="fas fa-file-pdf"></i> PDF
+                                                    </a>
+                                            
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let searchInput = document.getElementById("searchInput");
+            searchInput.addEventListener("keyup", function () {
+                let query = searchInput.value.toLowerCase();
+                let rows = document.querySelectorAll(".livraison-row");
+
+                rows.forEach(row => {
+                    let rowText = row.getAttribute("data-search").toLowerCase();
+                    if (rowText.includes(query)) {
+                        row.style.display = "table-row";
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+            });
+        });
+    </script>
+
+    <style>
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            transition: 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: scale(1.01);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .table {
+            background: #fff;
+            border-radius: 12px;
+        }
+
+        .table-dark {
+            background-color: #343a40;
+            color: #fff;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa;
+            transition: background-color 0.3s ease;
+        }
+
+        .badge {
+            font-size: 0.85rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+
+        .bg-custom-delivered {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .bg-custom-not-delivered {
+            background-color: #F44336;
+            color: #fff;
+        }
+
+        .btn-sm {
+            font-size: 0.875rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-custom-view {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+            color: #fff;
+        }
+
+        .btn-custom-view:hover {
+            background-color: #138496;
+            border-color: #138496;
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(23, 162, 184, 0.3);
+        }
+
+        .btn-custom-edit {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: #fff;
+        }
+
+        .btn-custom-edit:hover {
+            background-color: #218838;
+            border-color: #218838;
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #218838;
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+        }
+
+        .alert {
+            font-size: 1.2rem;
+            border-radius: 0.375rem;
+        }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+    </style>
 {% endblock %}

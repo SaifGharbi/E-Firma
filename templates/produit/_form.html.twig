@@ -1,4 +1,203 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'productForm'}}) }}
+
+<div class="container p-4 shadow rounded bg-light">
+    <h4 class="mb-3 text-center"></h4>
+
+    <!-- Global Form Errors -->
+    {% if form_errors(form) %}
+        <div class="alert alert-danger">
+            <strong>Veuillez corriger les erreurs ci-dessous :</strong>
+            {{ form_errors(form) }}
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <!-- Nom du Produit -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">🏷 Nom du Produit</label>
+            {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+            <div class="error-message text-danger small"></div>
+            {% if form_errors(form.nom) %}
+                <div class="text-danger small">{{ form_errors(form.nom) }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Quantité -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">🔢 Quantité</label>
+            {{ form_widget(form.quantite, {'attr': {'class': 'form-control'}}) }}
+            <div class="error-message text-danger small"></div>
+            {% if form_errors(form.quantite) %}
+                <div class="text-danger small">{{ form_errors(form.quantite) }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Prix -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">💰 Prix (EUR)</label>
+            {{ form_widget(form.prix, {'attr': {'class': 'form-control'}}) }}
+            <div class="error-message text-danger small"></div>
+            {% if form_errors(form.prix) %}
+                <div class="text-danger small">{{ form_errors(form.prix) }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Catégorie -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">📂 Catégorie</label>
+            <div class="input-group">
+                <span class="input-group-text">📁</span>
+                {{ form_widget(form.categorie, {
+                    'attr': {
+                        'class': 'form-select',
+                        'data-placeholder': 'Sélectionnez une catégorie'
+                    }
+                }) }}
+            </div>
+            <div class="error-message text-danger small"></div>
+            {% if form_errors(form.categorie) %}
+                <div class="text-danger small">{{ form_errors(form.categorie) }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-3">
+        <label class="form-label fw-bold">📜 Description</label>
+        {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+        <div class="error-message text-danger small"></div>
+        {% if form_errors(form.description) %}
+            <div class="text-danger small">{{ form_errors(form.description) }}</div>
+        {% endif %}
+    </div>
+
+    <!-- Image du Produit -->
+    <div class="mb-3">
+        <label class="form-label fw-bold">🖼 Image du Produit</label>
+        <div class="custom-file">
+            {{ form_widget(form.image, {
+                'attr': {
+                    'class': 'custom-file-input',
+                    'id': 'customFile'
+                }
+            }) }}
+            <label class="custom-file-label" for="customFile">Choisissez une image</label>
+        </div>
+        {% if form_errors(form.image) %}
+            <div class="text-danger small">{{ form_errors(form.image) }}</div>
+        {% endif %}
+    </div>
+
+  
+    <!-- Submit Button -->
+    <div class="text-end">
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-save"></i> {{ button_label|default('Enregistrer') }}
+        </button>
+    </div>
+</div>
+
 {{ form_end(form) }}
+
+<!-- JavaScript Validation -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById('productForm');
+
+        form.addEventListener("submit", function (event) {
+            let hasErrors = false;
+            const errorMessages = document.querySelectorAll('.error-message');
+
+            // Clear previous error messages
+            errorMessages.forEach(msg => msg.textContent = '');
+
+            let nom = document.querySelector("[name='produit[nom]']");
+            let quantite = document.querySelector("[name='produit[quantite]']");
+            let prix = document.querySelector("[name='produit[prix]']");
+            let description = document.querySelector("[name='produit[description]']");
+            let categorie = document.querySelector("[name='produit[categorie]']");
+
+            // Validation du nom
+            if (!nom.value.trim()) {
+                nom.nextElementSibling.textContent = "Le nom du produit est obligatoire.";
+                nom.classList.add('is-invalid');
+                hasErrors = true;
+            } else {
+                nom.classList.remove('is-invalid');
+            }
+
+            // Validation de la quantité
+            if (!quantite.value.trim() || isNaN(quantite.value) || quantite.value <= 0) {
+                quantite.nextElementSibling.textContent = "La quantité doit être un nombre positif.";
+                quantite.classList.add('is-invalid');
+                hasErrors = true;
+            } else {
+                quantite.classList.remove('is-invalid');
+            }
+
+            // Validation du prix
+            if (!prix.value.trim() || isNaN(prix.value) || prix.value <= 0) {
+                prix.nextElementSibling.textContent = "Le prix doit être un nombre valide.";
+                prix.classList.add('is-invalid');
+                hasErrors = true;
+            } else {
+                prix.classList.remove('is-invalid');
+            }
+
+            // Validation de la description
+            if (!description.value.trim()) {
+                description.nextElementSibling.textContent = "La description est obligatoire.";
+                description.classList.add('is-invalid');
+                hasErrors = true;
+            } else {
+                description.classList.remove('is-invalid');
+            }
+
+            // Validation de la catégorie
+            if (!categorie.value || categorie.value === "" || categorie.value === "0") {
+                categorie.parentElement.nextElementSibling.textContent = "Veuillez sélectionner une catégorie valide.";
+                categorie.classList.add('is-invalid');
+                hasErrors = true;
+            } else {
+                categorie.classList.remove('is-invalid');
+            }
+
+            if (hasErrors) {
+                event.preventDefault();
+            }
+        });
+
+        // Suppression de la classe invalid quand l'utilisateur commence à corriger
+        ['nom', 'quantite', 'prix', 'description', 'categorie'].forEach(fieldName => {
+            const field = document.querySelector(`[name='produit[${fieldName}]']`);
+            if (field) {
+                field.addEventListener('input', function() {
+                    this.classList.remove('is-invalid');
+                    this.nextElementSibling.textContent = ''; // Clear error message
+                });
+            }
+        });
+    });
+</script>
+
+<style>
+    .is-invalid {
+        border-color: #dc3545 !important;
+    }
+
+    .form-select.is-invalid {
+        background-image: none;
+    }
+
+    .input-group .is-invalid {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    .error-message {
+        margin-top: 5px;
+        display: block;
+    }
+</style>

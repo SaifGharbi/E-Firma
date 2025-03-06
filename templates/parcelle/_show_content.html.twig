@@ -28,10 +28,7 @@
                         <p><strong>Superficie:</strong> {{ parcelle.superficie|number_format(2, '.', ' ') }} m²</p>
                         <p><strong>Localisation:</strong> {{ parcelle.localisation|e }}</p>
                         <!-- OpenStreetMap Integration -->
-                        <div id="map" style="height: 400px; border-radius: 12px; border: 2px solidrgb(72, 255, 0);" class="mt-3 mb-4"></div>
-                <a href="{{ path('app_nasa_data') }}" class="btn btn-outline-secondary">
-                                    <i class="icon-map"></i> Nasa Satellite Image
-                </a>
+                        <div id="map" class="mt-3 mb-4" style="height: 400px; border-radius: 12px; border: 2px solidrgba(72, 255, 0, 0.29); box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);"></div>
                     </div>
                 </div>
             </div>
@@ -76,21 +73,38 @@
     </div>
 {% endif %}
 
-<div class="alert alert-info">
-    Température utilisée : {{ weather.main.temp ?? 25 }} °C<br>
-    Humidité utilisée : {{ weather.main.humidity ?? 80 }} %
-</div>
-
 {% if satelliteImageBase64 %}
     <div class="text-center mt-4">
-        <h3>🛰 Satellite Image (Sentinel-2)</h3>
-        <img src="data:image/png;base64,{{ satelliteImageBase64 }}" alt="Satellite View" class="img-fluid rounded shadow">
+    <h3>🛰 Satellite Image (Sentinel-2)</h3>
+    <div class="satellite-container">
+        {% if satelliteImageBase64 %}
+            <img src="data:image/png;base64,{{ satelliteImageBase64 }}" alt="Satellite View" class="satellite-image img-fluid shadow-sm" style="border-radius: 12px; max-width: 100%; cursor: pointer;" onclick="toggleSatelliteZoom()">
+        {% else %}
+            <div class="alert alert-warning">⚠️ No satellite image available for this parcelle.</div>
+        {% endif %}
     </div>
+</div>
+
+<script>
+    function toggleSatelliteZoom() {
+        const image = document.querySelector('.satellite-image');
+        image.classList.toggle('zoomed');
+    }
+</script>
+
+<style>
+    .satellite-image.zoomed {
+        transform: scale(1.5);
+        transition: transform 0.3s ease-in-out;
+    }
+</style>
 {% else %}
     <div class="alert alert-danger text-center">
         ❌ No satellite image available for this parcelle.
     </div>
 {% endif %}
+
+
         </div>
 
         <!-- Right Column: Weather Information -->
@@ -120,6 +134,16 @@
             {% else %}
                 <p class="text-muted">Aucune donnée météo disponible.</p>
             {% endif %}
+
+            {% if recommendation %}
+    <div class="card bg-light shadow-sm mb-4">
+        <div class="card-body text-center">
+            <h3 class="card-title text-primary">🌱 Recommandation Agricole</h3>
+            <p class="font-weight-bold text-primary">{{ recommendation }}</p>
+            <p class="text-muted">Basé sur la météo actuelle: {{ weather.main.temp }}°C, {{ weather.main.humidity }}% d'humidité.</p>
+        </div>
+    </div>
+{% endif %}
         </div>
         
     </div>
@@ -177,6 +201,34 @@
         L.marker([{{ latitude }}, {{ longitude }}]).addTo(map)
             .bindPopup(`<b>{{ parcelle.nom|e }}</b><br>{{ parcelle.localisation|e }}`)
             .openPopup();
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+    const map = L.map('map').setView([{{ latitude }}, {{ longitude }}], 13);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    const marker = L.marker([{{ latitude }}, {{ longitude }}]).addTo(map);
+    
+    marker.bindPopup(`
+        <div style="text-align: center;">
+            <h5 style="margin-bottom: 5px;">{{ parcelle.nom|e }}</h5>
+            <p><strong>Location:</strong> {{ parcelle.localisation|e }}</p>
+            <p><strong>Superficie:</strong> {{ parcelle.superficie|number_format(2, '.', ' ') }} m²</p>
+        </div>
+    `).openPopup();
+});
+
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        setTimeout(function() {
+            document.getElementById("weather-loading").style.display = "none";
+            document.getElementById("weather-content").style.display = "block";
+        }, 1500);
     });
 </script>
 

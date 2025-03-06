@@ -1,0 +1,9 @@
+{# FrontOffice/new.html.twig #}
+
+{% extends is_granted('ROLE_ADMIN') ? 'base_admin.html.twig' : 'base.html.twig' %}
+
+{% block title %}Add New Product{% endblock %}
+
+{% block body %}
+    {{ include('produittest/_new_content.html.twig') }}
+{% endblock %}

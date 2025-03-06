@@ -1,52 +1,46 @@
 <div class="container py-5">
-    <div class="card shadow-lg p-4">
-        <h2 class="text-center mb-4 text-primary">Order Summary</h2>
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-lg border-0 rounded-4 mb-4">
+                <div class="card-header bg-primary text-white text-center py-3">
+                </div>
+                <div class="card-body p-4">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
-        <div class="table-responsive">
-            <table class="table table-bordered text-center">
-                <thead class="bg-light">
-                <tr>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Subtotal</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for item in commandeItems %}
-                    <tr>
-                        <td>{{ item.produit.nom }}</td>
-                        <td>{{ item.quantity }}</td>
-                        <td>{{ item.produit.prix }} TND</td>
-                        <td><strong>{{ item.produit.prix * item.quantity }} TND</strong></td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    {% if form_errors(form) %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form) }}
+                        </div>
+                    {% endif %}
 
-        <div class="d-flex justify-content-between align-items-center mt-4">
-            <h4 class="text-secondary">Order Date:</h4>
-            <h4 class="text-dark">{{ "now"|date("Y-m-d") }}</h4>
-        </div>
+                    {% for child in form.children %}
+                        <div class="mb-3">
+                            {{ form_label(child, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {% if child.vars.name == 'statut' %}
+                                {{ form_widget(child, {'attr': {'class': 'form-control', 'disabled': 'disabled'}}) }}
+                                <input type="hidden" name="{{ child.vars.full_name }}" value="{{ child.vars.value }}">
+                            {% else %}
+                                {{ form_widget(child, {'attr': {'class': 'form-control'}}) }}
+                            {% endif %}
 
-        <div class="d-flex justify-content-between align-items-center mt-2">
-            <h3 class="text-primary">Total:</h3>
-            <h3 class="text-success"><strong>{{ total }} TND</strong></h3>
-        </div>
+                            {% if form_errors(child) %}
+                                <small class="text-danger">{{ form_errors(child) }}</small>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
 
-        <hr class="my-4">
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-save me-2"></i> {{ button_label|default('Save') }}
+                        </button>
+                        <a href="{{ path('app_commande_index') }}" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-arrow-left me-2"></i> Cancel
+                        </a>
+                    </div>
 
-        <div class="form-group text-center">
-            {{ form_start(form) }}
-            {{ form_row(form.total, { attr: { class: 'd-none', value: total, readonly: 'readonly' } }) }}
-            {{ form_row(form.date, { attr: { class: 'd-none', value: "now"|date("Y-m-d"), readonly: 'readonly' } }) }}
-            <button type="submit" href="{{ path('app_livraison_new') }}" class="btn btn-primary btn-lg w-100">Confirm Order</button>
-            {{ form_end(form) }}
-        </div>
-
-        <div class="text-center mt-3">
-            <a href="{{ path('app_commande_index') }}" class="btn btn-outline-secondary">Back to Cart</a>
+                    {{ form_end(form) }}
+                </div>
+            </div>
         </div>
     </div>
 </div>

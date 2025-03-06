@@ -38,36 +38,45 @@
                     </a>
                 </li>
                 <li class="nav-item d-none d-md-block"><a href="{{ path('admin_dashboard') }}" class="nav-link">Home</a></li>
-                <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Contact</a></li>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <li class="nav-item d-none d-md-block"><a href="{{ app.request.uri ~ '/new' }}" class="nav-link">New</a></li>
-                {% endif %}
             </ul>
 
             <ul class="navbar-nav ms-auto">
     <li class="nav-item dropdown user-menu">
-        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+        <img src="{{ asset('backoffice/assets/img/user2-160x160.jpg') }}" 
+             class="user-image rounded-circle shadow" alt="User Image"/>
+        <span class="d-none d-md-inline">
+            {{ app.user ? app.user.nom : 'Invité' }}
+        </span>
+    </a>
+    
+    <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+        <!-- User info -->
+        <li class="user-header bg-primary text-center p-3">
             <img src="{{ asset('backoffice/assets/img/user2-160x160.jpg') }}" 
-                 class="user-image rounded-circle shadow" alt="User Image"/>
-            <span class="d-none d-md-inline">
-                {{ app.user ? app.user.nom : 'Invité' }}
-            </span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-            <li class="user-header text-bg-primary">
-                <img src="{{ asset('backoffice/assets/img/user2-160x160.jpg') }}" 
-                     class="rounded-circle shadow" alt="User Image"/>
-                <p>
-                    {{ app.user ? app.user.nom : 'Invité' }} - 
-                    {{ app.user.roles[0] == 'ROLE_ADMIN' ? 'Administrator' : 'Utilisateur' }}
-                </p>
-            </li>
-            <li class="user-footer">
-                <a href="#" class="btn btn-default btn-flat">Profile</a>
-                <a href="{{ path('app_logout') }}" class="btn btn-default btn-flat float-end">Sign out</a>
-            </li>
-        </ul>
-    </li>
+                 class="rounded-circle shadow mb-2" alt="User Image"/>
+            <p class="mb-0">{{ app.user ? app.user.nom : 'Invité' }}</p>
+            <small class="text-light">
+                {% if app.user %}
+                    {{ app.user.roles[0] == 'ROLE_ADMIN' ? 'Administrateur' : 'Utilisateur' }}
+                {% else %}
+                    Non connecté
+                {% endif %}
+            </small>
+        </li>
+
+        <!-- Dropdown items -->
+        <li class="user-footer d-flex justify-content-between p-2">
+            <a href="#" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-person-circle"></i> Profile
+            </a>
+            <a href="{{ path('app_logout') }}" class="btn btn-outline-danger btn-sm">
+                <i class="bi bi-box-arrow-right"></i> Sign out
+            </a>
+        </li>
+    </ul>
+</li>
+
 </ul>
 
         </div>
@@ -83,79 +92,93 @@
         </div>
 
         <div class="sidebar-wrapper">
-            <nav class="mt-2">
-                <ul class="nav sidebar-menu flex-column">
-                    <li class="nav-item">
-                        <a href="{{ path('admin_dashboard') }}" class="nav-link">
-                            <i class="nav-icon bi bi-speedometer"></i>
-                            <p>Dashboard</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ path('admin_users') }}" class="nav-link">
-                            <i class="nav-icon bi bi-people-fill"></i>
-                            <p>Users</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ path('admin_parcelles') }}" class="nav-link">
-                            <i class="nav-icon bi bi-tree-fill"></i>
-                            <p>Parcelles</p>
-                        </a>
-                    </li>
-                     <li class="nav-item">
-                        <a href="{{ path('app_produit_index') }}" class="nav-link">
-                            <i class="nav-icon bi bi-tree-fill"></i>
-                            <p>Produits</p>
-                        </a>
-                    </li>
-                    
-                     <li class="nav-item">
-                        <a href="{{ path('app_rendez_vous_index') }}" class="nav-link">
-                            <i class="nav-icon bi bi-tree-fill"></i>
-                            <p>Rendez-vous</p>
-                        </a>
-                    </li>
-                     <li class="nav-item">
-                        <a href="{{ path('app_culture_parcelle_index') }}" class="nav-link">
-                            <i class="nav-icon bi bi-tree-fill"></i>
-                            <p>Culture Parcelle</p>
-                        </a>
-                    </li>
-                     <li class="nav-item">
-                        <a href="{{ path('app_commande_index') }}" class="nav-link">
-                            <i class="nav-icon bi bi-tree-fill"></i>
-                            <p>Commandes</p>
-                        </a>
-                    </li>
-                     <li class="nav-item">
-                        <a href="{{ path('app_parcelle_index') }}" class="nav-link">
-                            <i class="nav-icon bi bi-tree-fill"></i>
-                            <p>Parcelles</p>
-                        </a>
-                    </li>
-                       <li class="nav-item">
-                        <a href="{{ path('app_produit_categorie_index') }}" class="nav-link">
-                            <i class="nav-icon bi bi-tree-fill"></i>
-                            <p>Produits Categories</p>
-                        </a>
-                    </li>
-                       <li class="nav-item">
-                        <a href="{{ path('app_livraison_index') }}" class="nav-link">
-                            <i class="nav-icon bi bi-tree-fill"></i>
-                            <p>livraisons</p>
-                        </a>
-                    </li>
-                     <li class="nav-item">
-                        <a href="{{ path('app_service_index') }}" class="nav-link">
-                            <i class="nav-icon bi bi-tree-fill"></i>
-                            <p>Services</p>
-                        </a>
-                    </li>
-                    
-                </ul>
-            </nav>
-        </div>
+    <nav class="mt-2">
+        <ul class="nav sidebar-menu flex-column">
+
+            <!-- Users Management -->
+            <li class="nav-header text-uppercase font-weight-bold">Gestion des Utilisateurs</li>
+            <li class="nav-item">
+                <a href="{{ path('admin_users') }}" class="nav-link">
+                    <i class="nav-icon bi bi-people-fill"></i>
+                    <p>Utilisateurs</p>
+                </a>
+            </li>
+
+            <!-- Products & Categories -->
+            <li class="nav-header text-uppercase font-weight-bold">Gestion des Produits</li>
+            <li class="nav-item">
+                <a href="{{ path('app_produit_index_admin') }}" class="nav-link">
+                    <i class="nav-icon bi bi-box-seam"></i>
+                    <p>Produits</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ path('app_produit_categorie_index') }}" class="nav-link">
+                    <i class="nav-icon bi bi-tags"></i>
+                    <p>Catégories de Produits</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ path('app_produit_stats') }}" class="nav-link">
+                    <i class="nav-icon bi bi-bar-chart-line"></i>
+                    <p>Statistiques Produits</p>
+                </a>
+            </li>
+
+            <!-- Parcelles & Cultures -->
+            <li class="nav-header text-uppercase font-weight-bold">Gestion des Parcelles & Cultures</li>
+            <li class="nav-item">
+                <a href="{{ path('app_parcelle_index') }}" class="nav-link">
+                    <i class="nav-icon bi bi-tree-fill"></i>
+                    <p>Parcelles</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ path('app_culture_parcelle_index') }}" class="nav-link">
+                    <i class="nav-icon bi bi-flower1"></i>
+                    <p>Culture Parcelle</p>
+                </a>
+            </li>
+
+            <!-- Orders & Deliveries -->
+            <li class="nav-header text-uppercase font-weight-bold">Gestion des Commandes & Livraisons</li>
+            <li class="nav-item">
+                <a href="{{ path('app_admin_orders') }}" class="nav-link">
+                    <i class="nav-icon bi bi-cart-check"></i>
+                    <p>Commandes</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ path('app_livraison_index') }}" class="nav-link">
+                    <i class="nav-icon bi bi-truck"></i>
+                    <p>Livraisons</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ path('app_stats_top') }}" class="nav-link">
+                    <i class="nav-icon bi bi-graph-up"></i>
+                    <p>Statistiques Commandes</p>
+                </a>
+            </li>
+
+            <!-- Services & Appointments -->
+            <li class="nav-header text-uppercase font-weight-bold">Gestion des Services & Rendez-vous</li>
+            <li class="nav-item">
+                <a href="{{ path('app_service_index_manage') }}" class="nav-link">
+                    <i class="nav-icon bi bi-wrench"></i>
+                    <p>Gérer Services</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ path('app_service_rendez_vous_stats') }}" class="nav-link">
+                    <i class="nav-icon bi bi-calendar-check"></i>
+                    <p>Statistiques Rendez-vous</p>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
     </aside>
 
     <!-- Main Content -->

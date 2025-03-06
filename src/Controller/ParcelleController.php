@@ -88,6 +88,9 @@ final class ParcelleController extends AbstractController
         // Get weather based on the parcelle's location
         $weather = $this->weatherService->getWeatherByLocation($parcelleLocation);
 
+        // Générer une recommandation en fonction de la météo
+        $recommendation = $this->getWeatherBasedRecommendation($weather);
+
         try {
             $recommendedCrop = $this->cropService->getRecommendedCrop(
                 $weather['main']['temp'] ?? 25,
@@ -103,6 +106,8 @@ final class ParcelleController extends AbstractController
             $recommendedCrop = null;
             $satelliteImageBase64 = null;
         }
+
+        
     
 
         return $this->render('parcelle/show.html.twig', [
@@ -112,7 +117,26 @@ final class ParcelleController extends AbstractController
             'parcelleLocation' => $parcelleLocation,
             'recommendedCrop' => $recommendedCrop,
             'satelliteImageBase64' => $satelliteImageBase64,
+            'recommendation' => $recommendation,
         ]);
+    }
+
+    private function getWeatherBasedRecommendation(array $weatherData): string
+    {
+        $temperature = $weatherData['main']['temp'];
+        $humidity = $weatherData['main']['humidity'];
+
+        if ($temperature > 30) {
+            return "🌾 Il fait très chaud ! Pensez à cultiver du sorgho ou du millet.";
+        } elseif ($temperature > 20 && $humidity > 60) {
+            return "🌱 Conditions idéales pour le riz ou le maïs.";
+        } elseif ($temperature > 15 && $humidity < 50) {
+            return "🌾 Le blé et l'orge sont adaptés à ces conditions.";
+        } elseif ($temperature < 10) {
+            return "🥔 Temps froid détecté. Cultivez des pommes de terre ou des betteraves.";
+        } else {
+            return "🌿 Conditions variables, vérifiez manuellement la meilleure culture.";
+        }
     }
 
     #[Route('/{id}/edit', name: 'app_parcelle_edit', methods: ['GET', 'POST'])]
@@ -143,6 +167,8 @@ final class ParcelleController extends AbstractController
 
         return $this->redirectToRoute('app_parcelle_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    
 
 
 }

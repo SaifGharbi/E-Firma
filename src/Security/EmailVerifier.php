@@ -12,41 +12,31 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class EmailVerifier
 {
-    public function __construct(
-        private VerifyEmailHelperInterface $verifyEmailHelper,
-        private MailerInterface $mailer,
-        private EntityManagerInterface $entityManager
-    ) {
+    private VerifyEmailHelperInterface $verifyEmailHelper;
+    private MailerInterface $mailer;
+
+    public function __construct(VerifyEmailHelperInterface $verifyEmailHelper, MailerInterface $mailer)
+    {
+        $this->verifyEmailHelper = $verifyEmailHelper;
+        $this->mailer = $mailer;
     }
 
-    public function sendEmailConfirmation(string $verifyEmailRouteName, User $user, TemplatedEmail $email): void
+    public function sendEmailConfirmation(string $verifyRouteName, User $user, TemplatedEmail $email): void
     {
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
-            $verifyEmailRouteName,
-            (string) $user->getId(),
-            (string) $user->getEmail()
+            $verifyRouteName,
+            (string) $user->getId(),  // Ensure ID is string
+            $user->getEmail(),
+            ['id' => $user->getId()]
         );
 
-        $context = $email->getContext();
-        $context['signedUrl'] = $signatureComponents->getSignedUrl();
-        $context['expiresAtMessageKey'] = $signatureComponents->getExpirationMessageKey();
-        $context['expiresAtMessageData'] = $signatureComponents->getExpirationMessageData();
-
-        $email->context($context);
+        // ✅ Pass Signed URL to the Email Template
+        $email->context([
+            'signedUrl' => $signatureComponents->getSignedUrl(), // This must be passed!
+            'expiresAtMessageKey' => $signatureComponents->getExpirationMessageKey(),
+            'expiresAtMessageData' => $signatureComponents->getExpirationMessageData(),
+        ]);
 
         $this->mailer->send($email);
-    }
-
-    /**
-     * @throws VerifyEmailExceptionInterface
-     */
-    public function handleEmailConfirmation(Request $request, User $user): void
-    {
-        $this->verifyEmailHelper->validateEmailConfirmationFromRequest($request, (string) $user->getId(), (string) $user->getEmail());
-
-        $user->setIsVerified(true);
-
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
     }
 }

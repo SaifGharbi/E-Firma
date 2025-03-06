@@ -40,4 +40,13 @@ class ServiceRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function getServiceStatsByType(): array
+    {
+        return $this->getEntityManager()->createQuery("
+            SELECT s.type AS type, SUM(s.prix) AS totalPrice, COUNT(s.id) AS count
+            FROM App\Entity\Service s
+            GROUP BY s.type
+            ORDER BY totalPrice DESC
+        ")->getResult();
+    }
 }

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order Confirmation{% endblock %}
+
+{% block body %}
+    <section class="ftco-section">
+        <div class="container text-center py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10">
+                    <h1 class="mb-4 text-success fw-bold">Thank You for Shopping with EFirma!</h1>
+                    <p class="mb-4">Your order #{{ commandeId }} will be placed soon.</p>
+
+                    <!-- Progress Bar with Animation -->
+                    <div class="progress mb-4" style="height: 20px;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progressBar"></div>
+                    </div>
+
+                    <p class="text-muted">Please wait while we process your order...</p>
+
+                    <!-- Auto-redirect after 3 seconds with animation -->
+                    <script>
+                        let width = 0;
+                        const progressBar = document.getElementById('progressBar');
+                        const interval = setInterval(() => {
+                            if (width >= 100) {
+                                clearInterval(interval);
+                                window.location.href = "{{ path('cart_add_livraison') }}";
+                            } else {
+                                width += 100 / 30; // 3 seconds = 30 increments (100ms each)
+                                progressBar.style.width = width + '%';
+                            }
+                        }, 100);
+                    </script>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .progress-bar {
+            background-color: #28a745; /* Green for success */
+            transition: width 0.1s linear;
+        }
+
+        .progress {
+            width: 60%;
+            margin: 0 auto;
+            border-radius: 10px;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,79 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'enctype': 'multipart/form-data'}}) }}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg p-4 rounded-3">
+                <h3 class="text-center text-dark mb-4">
+                    <i class="fas fa-box-open"></i> Ajouter un Produit
+                </h3>
+
+                <hr class="mb-4">
+
+                <div class="row">
+                    <!-- ✅ Nom du Produit -->
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.nom, 'Nom du Produit', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.nom) }}
+                    </div>
+
+                    <!-- ✅ Quantité -->
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.quantite, 'Quantité', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.quantite, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.quantite) }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- ✅ Prix -->
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.prix, 'Prix (EUR)', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.prix, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.prix) }}
+                    </div>
+
+                    <!-- ✅ Catégorie -->
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.categorie, 'Catégorie', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.categorie, {'attr': {'class': 'form-select'}}) }}
+                        {{ form_errors(form.categorie) }}
+                    </div>
+                </div>
+
+                <!-- ✅ Description -->
+                <div class="mb-3">
+                    {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '3'}}) }}
+                    {{ form_errors(form.description) }}
+                </div>
+
+                <!-- ✅ Image Upload -->
+                <div class="mb-3">
+                    {{ form_label(form.image, 'Image du Produit', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    <div class="input-group">
+                        {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    {{ form_errors(form.image) }}
+                </div>
+
+                <!-- ✅ Utilisateur Assigné -->
+                <div class="mb-3">
+                    {{ form_label(form.user, 'Utilisateur Assigné', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    {{ form_widget(form.user, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.user) }}
+                </div>
+
+                <!-- ✅ Submit Button -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success w-100 shadow-sm py-2">
+                        <i class="fas fa-save"></i> Enregistrer le Produit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ form_end(form) }}

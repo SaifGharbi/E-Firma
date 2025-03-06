@@ -8,13 +8,19 @@ parameters:
     openweather.api_key: 'a729d36d5045c2f0825b622482b67d31'
     sentinelhub.client_id: 'a02c4386-5332-4eec-9779-5e8c38c8a354'
     sentinelhub.client_secret: 'lbYnlZ9iaVSKPGpKIPaAs3ijLCV78yHP'
-
+    image_directory: '%kernel.project_dir%/public/uploads/images'
+    stripe_secret_key: '%env(STRIPE_SECRET_KEY)%'
+    twilio_account_sid: '%env(TWILIO_ACCOUNT_SID)%'
+    twilio_auth_token: '%env(TWILIO_AUTH_TOKEN)%'
+    twilio_phone_number: '%env(TWILIO_PHONE_NUMBER)%'
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-
+    App\Service\PaymentService:
+        arguments:
+            $stripeSecretKey: '%env(STRIPE_SECRET_KEY)%'
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:

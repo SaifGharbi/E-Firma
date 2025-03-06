@@ -2,22 +2,72 @@
 
 {% block title %}Register{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('FrontOffice/css/style.css') }}">
+{% endblock %}
+
 {% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+    <section class="login-section" style="position: relative; overflow: hidden; background-image: none !important;">
+    <div style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('{{ asset('FrontOffice/images/bg_3.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        filter: blur(8px);
+        z-index: -1;">
+    </div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="login-box">
+                        <h2 class="text-center">Create an Account</h2>
 
-    <h1>Register</h1>
+                        <form method="post">
+                            {{ form_widget(registrationForm._token) }} {# CSRF Token Fix #}
 
-    {{ form_errors(registrationForm) }}
+                            <div class="form-group">
+                                {{ form_label(registrationForm.nom, 'Nom') }}
+                                {{ form_widget(registrationForm.nom, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(registrationForm.nom) }}
+                            </div>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+                            <div class="form-group">
+                                {{ form_label(registrationForm.role, 'Choisissez votre rôle') }}
+                                {{ form_widget(registrationForm.role, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(registrationForm.role) }}
+                            </div>
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+                            <div class="form-group">
+                                {{ form_label(registrationForm.email) }}
+                                {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(registrationForm.email) }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form_label(registrationForm.plainPassword, 'Password') }}
+                                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(registrationForm.plainPassword) }}
+                            </div>
+
+                            <div class="form-group form-check">
+                                {{ form_widget(registrationForm.agreeTerms) }}
+                                {{ form_label(registrationForm.agreeTerms, 'Agree terms') }}
+                                {{ form_errors(registrationForm.agreeTerms) }}
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block">Register</button>
+
+                            <p class="text-center mt-3">
+                                Already have an account? <a href="{{ path('app_login') }}">Login here</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

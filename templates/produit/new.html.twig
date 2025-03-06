@@ -1,9 +1,11 @@
-{# FrontOffice/new.html.twig #}
+{% extends 'base.html.twig' %}
 
-{% extends is_granted('ROLE_ADMIN') ? 'base_admin.html.twig' : 'base.html.twig' %}
-
-{% block title %}Add New Product{% endblock %}
+{% block title %}New Produit{% endblock %}
 
 {% block body %}
-    {{ include('produit/_new_content.html.twig') }}
-{% endblock %}
+
+    {{ include('produit/_form.html.twig') }}
+
+<a href="{{ path('app_produit_index') }}" class="btn btn-secondary mt-3">
+        <i class="fas fa-arrow-left me-2"></i> Retour à la liste
+    </a>{% endblock %}

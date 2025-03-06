@@ -40,4 +40,23 @@ class RendezVousRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function getAppointmentsByService(): array
+    {
+        return $this->getEntityManager()->createQuery("
+            SELECT s.nom AS serviceName, COUNT(r.id) AS count
+            FROM App\Entity\RendezVous r
+            JOIN r.service s
+            GROUP BY s.nom
+            ORDER BY count DESC
+        ")->getResult();
+    }
+    public function searchQuery(?string $searchTerm = ''): Query
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->where('r.id LIKE :search OR r.date LIKE :search OR r.statut LIKE :search')
+            ->setParameter('search', '%' . $searchTerm . '%')
+            ->orderBy('r.date', 'DESC');
+
+        return $qb->getQuery();
+    }
 }

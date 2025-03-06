@@ -1,7 +1,10 @@
-{% extends is_granted('ROLE_ADMIN') ? 'base_admin.html.twig' : 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Add Rendezvous{% endblock %}
+{% block title %}New RendezVous{% endblock %}
 
 {% block body %}
-    {{ include('rendez_vous/_new_content.html.twig') }}
+
+    {{ include('rendez_vous/_form.html.twig') }}
+
+    <a href="{{ path('app_service_index') }}">back to listtt</a>
 {% endblock %}

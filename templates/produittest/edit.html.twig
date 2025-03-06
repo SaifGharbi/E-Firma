@@ -1,0 +1,7 @@
+{% extends is_granted('ROLE_ADMIN') ? 'base_admin.html.twig' : 'base.html.twig' %}
+
+{% block title %}Edit Produit{% endblock %}
+
+{% block body %}
+    {{ include('produittest/_edit_content.html.twig') }}
+{% endblock %}

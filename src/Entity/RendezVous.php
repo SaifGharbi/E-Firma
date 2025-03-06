@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\RendezVousRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RendezVousRepository::class)]
 class RendezVous
@@ -15,13 +16,34 @@ class RendezVous
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'The status cannot be null.')]
+    #[Assert\Type(type: 'bool', message: 'The status must be a boolean (true or false).')]
     private ?bool $statut = null;
 
-    #[ORM\ManyToOne(inversedBy: 'rendezVouses')]
+    #[ORM\ManyToOne(targetEntity: Service::class, inversedBy: 'rendezVous')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'A service must be selected for the appointment.')]
     private ?Service $service = null;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: false)]
+    #[Assert\NotNull(message: 'A user must be selected for the appointment.')]
+    private ?User $user = null;
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 
     public function getId(): ?int
     {

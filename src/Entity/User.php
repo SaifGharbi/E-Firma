@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -24,19 +26,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private string $nom;
 
-    #[ORM\Column (length: 255)]
+    #[ORM\Column(length: 255)]
     private ?string $roles = null;
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Produit::class, cascade: ['persist', 'remove'])]
+    private Collection $produits;
 
+    public function __construct()
+    {
+        $this->produits = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -51,49 +56,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * Returns the roles granted to the user.
-     *
-     * @return array
-     */
     public function getRoles(): array
     {
         return [$this->roles];
     }
-    /**
-     * Get the user's role.
-     *
-     * @return string|null
-     */
+
     public function getRole(): ?string
     {
         return $this->roles;
     }
 
-    /**
-     * Set the user's role.
-     *
-     * @param string|null $roles
-     * @return self
-     */
     public function setRole(?string $roles): self
     {
         $this->roles = $roles;
-
         return $this;
     }
 
@@ -105,13 +88,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
-
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -120,35 +99,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getNom(): string
     {
         return $this->nom;
     }
 
-    /**
-     * @param string $nom
-     */
     public function setNom(string $nom): void
     {
         $this->nom = $nom;
     }
 
-
-
-    /**
-     * @see UserInterface
-     */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
     }
 
+    public function getProduits(): Collection
+    {
+        return $this->produits;
+    }
+
+    public function addProduit(Produit $produit): self
+    {
+        if (!$this->produits->contains($produit)) {
+            $this->produits->add($produit);
+            $produit->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeProduit(Produit $produit): self
+    {
+        if ($this->produits->removeElement($produit)) {
+            if ($produit->getUser() === $this) {
+                $produit->setUser(null);
+            }
+        }
+        return $this;
+    }
 }

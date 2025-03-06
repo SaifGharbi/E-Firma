@@ -1,14 +1,23 @@
-<div class="col-md-12">
-    <h5 class="mt-4 text-primary">Order Summary</h5>
-    <ul class="list-group mb-3">
-        <li class="list-group-item d-flex justify-content-between">
-            <strong>Total:</strong> <span>{{ livraison.commande.total ?? '0' }} TND</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <strong>Date:</strong> <span>{{ livraison.commande.date ? livraison.commande.date|date('Y-m-d') : 'N/A' }}</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <strong>Order Status:</strong> <span class="text-success">Treated</span>
-        </li>
-    </ul>
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Livraison Form</h4>
+        </div>
+        <div class="card-body">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+            {# Display form errors #}
+            {% for field in form %}
+                <div class="mb-3">
+                    {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(field) }}
+                </div>
+            {% endfor %}
+
+            <button class="btn btn-success w-100">{{ button_label|default('Save') }}</button>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
 </div>

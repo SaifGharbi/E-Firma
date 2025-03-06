@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Appointments{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .appointment-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .appointment-header {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .table-responsive {
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background-color: #007bff;
+            color: white;
+            font-weight: 500;
+            border-bottom: none;
+        }
+
+        .table tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f8ff;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+            padding: 1rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .no-appointments {
+            text-align: center;
+            color: #6c757d;
+            padding: 20px;
+            font-size: 1.1rem;
+        }
+
+        .btn-custom {
+            margin-right: 10px;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .btn-custom:hover {
+            transform: scale(1.05);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="appointment-container">
+        <h1 class="appointment-header">My Appointments</h1>
+
+        {% if rendez_vouses is empty %}
+            <div class="no-appointments">
+                <p>You have no appointments scheduled.</p>
+                <a href="{{ path('app_rendez_vous_new') }}" class="btn btn-primary">Schedule a New Appointment</a>
+            </div>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Date & Time</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for rendez_vou in rendez_vouses %}
+                        <tr>
+                            <td>{{ rendez_vou.service.nom }}</td>
+                            <td>{{ rendez_vou.date|date('Y-m-d H:i') }}</td>
+                            <td>
+                                    <span class="badge {{ rendez_vou.statut ? 'bg-success' : 'bg-warning' }}">
+                                        {{ rendez_vou.statut ? 'Confirmed' : 'Pending' }}
+                                    </span>
+                            </td>
+                            <td>
+                                <a href="{{ path('app_rendez_vous_show', {'id': rendez_vou.id}) }}">show</a>
+                                <a href="{{ path('app_rendez_vous_edit', {'id': rendez_vou.id}) }}">edit</a>
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+
+    </div>
+{% endblock %}

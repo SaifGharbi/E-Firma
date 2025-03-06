@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\LivraisonRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LivraisonRepository::class)]
 class Livraison
@@ -15,13 +16,18 @@ class Livraison
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'The delivery address cannot be blank.')]
     private ?string $adresse = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\GreaterThanOrEqual(
+        value: "today",
+        message: "The delivery date must be greater than or equal to today."
+    )]
     private ?\DateTimeInterface $date_livraison = null;
 
-    #[ORM\Column]
-    private ?bool $statut = null;
+    #[ORM\Column(type: Types::BOOLEAN, options: ["default" => false])]
+    private ?bool $statut = false; // Default to false (not delivered)
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Commande $commande = null;

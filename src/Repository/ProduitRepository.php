@@ -40,4 +40,47 @@ class ProduitRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function getProductStatsByCategory(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('c.nom as category', 'COUNT(p.id) as product_count', 'AVG(p.prix) as avg_price')
+            ->join('p.categorie', 'c')
+            ->groupBy('c.nom')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get total number of products
+     */
+    public function getTotalProducts(): int
+    {
+        return $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * Get average product price
+     */
+    public function getAverageProductPrice(): float
+    {
+        return $this->createQueryBuilder('p')
+            ->select('AVG(p.prix)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    public function getTopCategories(int $limit = 5): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('c.nom as category, COUNT(p.id) as product_count')
+            ->join('p.categorie', 'c')
+            ->groupBy('c.nom')
+            ->orderBy('product_count', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
 }

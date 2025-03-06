@@ -1,4 +1,55 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-primary text-white text-center">
+        <h3>{{ button_label|default('Schedule Appointment') }}</h3>
+    </div>
+    <div class="card-body">
+        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+        <div class="mb-3">
+            {{ form_label(form.date, 'Appointment Date', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+            {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+            {% if form_errors(form.date) %}
+                <div class="text-danger">{{ form_errors(form.date) }}</div>
+            {% endif %}
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success btn-lg">
+                <i class="fas fa-calendar-check me-2"></i> {{ button_label|default('Save') }}
+            </button>
+            <a href="{{ path('app_rendez_vous_index') }}" class="btn btn-secondary btn-lg">
+                <i class="fas fa-arrow-left me-2"></i> Cancel
+            </a>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+
+<style>
+    .card {
+        max-width: 600px;
+        margin: 0 auto;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .form-control:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+
+    .btn-lg {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn-success:hover {
+        transform: scale(1.05);
+        box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-secondary:hover {
+        transform: scale(1.05);
+        box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+    }
+</style>

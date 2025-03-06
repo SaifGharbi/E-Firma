@@ -1,7 +1,10 @@
-{% extends is_granted('ROLE_ADMIN') ? 'base_admin.html.twig' : 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Add Service{% endblock %}
+{% block title %}New Service{% endblock %}
 
 {% block body %}
-    {{ include('service/_new_content.html.twig') }}
+
+    {{ include('service/_form.html.twig') }}
+
+    <a href="{{ path('app_service_index') }}">back to list</a>
 {% endblock %}

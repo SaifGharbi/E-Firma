@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Delivery Map{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center">📍 Delivery Route</h1>
+        <div id="map" style="height: 500px; border-radius: 10px;"></div>
+    </div>
+
+    <!-- Leaflet Map Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var map = L.map('map').setView([36.8065, 10.1815], 13); // Centered on Tunis
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Base position (Warehouse or Shop)
+            var baseLatLng = [36.8065, 10.1815]; // Example: Tunis
+
+            // Destination address
+            var deliveryAddress = "{{ deliveryAddress|escape('js') }}"; // ✅ Escape for safety
+
+            // Use OpenStreetMap's Nominatim API to get coordinates for the address
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(deliveryAddress)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        var deliveryLatLng = [data[0].lat, data[0].lon];
+
+                        // Add markers
+                        L.marker(baseLatLng).addTo(map).bindPopup("📍 Start Point (Warehouse)").openPopup();
+                        L.marker(deliveryLatLng).addTo(map).bindPopup("📍 Delivery Address: " + deliveryAddress).openPopup();
+
+                        // Draw route
+                        L.polyline([baseLatLng, deliveryLatLng], { color: 'blue', weight: 5 }).addTo(map);
+
+                        // Fit map to route
+                        map.fitBounds([baseLatLng, deliveryLatLng]);
+                    } else {
+                        alert("⚠️ Unable to find location for: " + deliveryAddress);
+                    }
+                })
+                .catch(error => console.error("Error fetching delivery location:", error));
+        });
+    </script>
+
+    <!-- Leaflet JS & CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+{% endblock %}
