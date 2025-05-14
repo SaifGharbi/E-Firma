@@ -57,9 +57,9 @@ python CROP_ai.py
 
 ---
 
-##Utilisation
+##  Utilisation
 
-###Application Web (Symfony)
+###  Application Web (Symfony)
 
 - Connexion / inscription (hashage sécurisé `$2y$`)
 - Gestion des parcelles, cultures et utilisateurs
@@ -68,7 +68,7 @@ python CROP_ai.py
 - Réservation de services avec vétérinaires ou experts
 - Suspension temporaire des comptes (admin)
 
-###Application JavaFX
+###  Application JavaFX
 
 - Authentification synchronisée avec Symfony
 - Consultation météo (OpenWeatherMap) & sol (SoilGrids)
@@ -78,7 +78,7 @@ python CROP_ai.py
 
 ---
 
-##Fonctionnalités
+##  Fonctionnalités
 
 - ✅ Gestion multi-utilisateur : clients, agriculteurs, vétérinaires, experts
 - ✅ Vente de produits & livraison intégrée
@@ -90,18 +90,18 @@ python CROP_ai.py
 
 ---
 
-##Contribution
+##  Contribution
 
 Nous remercions tous ceux qui ont contribué à ce projet ! ❤️
 
-###Contributeurs :
+### Contributeurs :
 - [@utilisateur1](https://github.com/saifgharbi) – Gestion des Parcelles + AI
 - [@utilisateur2](https://github.com/nouranelammouchi7) – Gestion Produits + ChatBot
 - [@utilisateur3](https://github.com/ahmedmelki) – Gestion des livraisons 
 - [@utilisateur4](https://github.com/medsaidneffati) – Gestion Services/rendez vous
 - [@utilisateur5](https://github.com/hadidilina5) – Gestion User + APIS
 
-###Comment contribuer ?
+###  Comment contribuer ?
 
 1. Fork le projet :
    - Clique sur le bouton **Fork** en haut à droite de la page GitHub
@@ -124,7 +124,7 @@ git push origin feature/ma-contribution
 
 ---
 
-##Licence
+##  Licence
 
 Ce projet est sous la licence **MIT**.
 
