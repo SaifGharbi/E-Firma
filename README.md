@@ -21,6 +21,7 @@ Il s’agit d’une plateforme complète permettant aux **agriculteurs**, **clie
 - [Utilisation](#utilisation)
 - [Fonctionnalités](#fonctionnalités)
 - [Contribution](#contribution)
+- [Hébergement](#Hébergement)
 - [Licence](#licence)
 
 ---
@@ -123,6 +124,15 @@ git push origin feature/ma-contribution
 ```
 
 ---
+
+## Hébergement
+
+Le projet est hébergé comme suit :
+
+- 🔗 **Application Web (Symfony)** : déployée localement via `symfony serve`
+- 💻 **Application JavaFX** : exécutable localement via IntelliJ/VS Code
+- 📦 **Dépôt public GitHub** : [https://github.com/SaifGharbi/e-firma](https://github.com/SaifGharbi/e-firma)
+
 
 ##  Licence
 
